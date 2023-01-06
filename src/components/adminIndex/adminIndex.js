@@ -99,7 +99,7 @@ function descendingComparator(a, b, orderBy) {
     return stabilizedThis?.map((el) => el[0]);
   }
   
-export default function DashboardUser({responseData}) {
+export default function AdminIndex({responseData}) {
     const navigate = useNavigate()
     
     const [open, setOpen] = useState(null);
@@ -171,9 +171,6 @@ export default function DashboardUser({responseData}) {
       setFilterName(event.target.value);
     };
 
-    const userHandler = (e, id) => {
-        navigate(`/dashboard/student/${id}`, { replace: true });
-    } 
   
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - responseData.length) : 0;
   
@@ -199,13 +196,13 @@ return (
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     const { _id, firstName, lastName, studentId, department, gender } = row;
                     const selectedUser = selected.indexOf(firstName) !== -1;
                     const dept = department.toUpperCase();
                     return (
                       
-                      <TableRow hover key={_id} tabIndex={-1} role="checkbox" selected={selectedUser} onClick={(e) => userHandler( e, _id)}>
+                      <TableRow hover key={_id} tabIndex={-1} role="checkbox" selected={selectedUser} >
                           
                         <TableCell padding="checkbox">
                           {/* <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, firstName)} /> */}
@@ -288,7 +285,7 @@ return (
           />
         </Card>
       </Container>
-      {/* <Popover
+      <Popover
       open={Boolean(open)}
       anchorEl={open}
       onClose={handleCloseMenu}
@@ -315,7 +312,7 @@ return (
         <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
         Delete
       </MenuItem>
-    </Popover> */}
+    </Popover>
   </>
 );
 }

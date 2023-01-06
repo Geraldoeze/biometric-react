@@ -4,7 +4,8 @@ import {useState, useEffect} from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Container, Typography, Stack } from '@mui/material';
 
-import { DashboardUser } from '../components/dashboardUser';
+// import { DashboardUser } from '../components/dashboardUser';
+import { AdminIndex } from '../components/adminIndex';
 import { useHttpClient } from '../hooks/http-hook';
 
 import LoadingSpinner from '../UIElement/LoadingSpinner';
@@ -49,7 +50,7 @@ console.log(response)
           </Typography>
         </Stack>
         {isLoading && <LoadingSpinner asOverlay />}
-        {response && <DashboardUser responseData={response} />}
+        {response && <AdminIndex responseData={response} />}
       </Container>
     </>
   );
