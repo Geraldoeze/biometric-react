@@ -2,6 +2,7 @@
   display: inline-block;
   width: 64px;
   height: 64px;
+  color:cornflowerblue
 }
 
 .lds-dual-ring:after {

@@ -1,21 +1,25 @@
 import { Helmet } from 'react-helmet-async';
 import {useState, useEffect, useContext} from 'react';
 import { Container, Typography, Stack, Button } from '@mui/material';
-
+import { Navigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 
 import Iconify from '../components/iconify';
 import  { AdminIndex } from '../components/adminIndex'
-import { DashboardUser } from '../components/dashboardUser';
+
 import { AuthContext } from '../context/auth-context';
 import { useHttpClient } from '../hooks/http-hook';
 
 import LoadingSpinner from '../UIElement/LoadingSpinner';
 
+
 const AdminPage = () => {
     const [ response, setResponse ] = useState(); 
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest } = useHttpClient();
+    const navigate = useNavigate();
+
 
      // fetch students data
   useEffect(() => {
@@ -30,6 +34,15 @@ const AdminPage = () => {
   }
   getData();
  },[])
+
+ const newSudentHandler = () => {
+    navigate('/admin/new', {replace: true })
+ };
+
+ const newDepartmentHandler = () => {
+    navigate('/admin/department', {replace: true })
+ };
+
 
  console.log(auth.userDetails)
     return ( 
@@ -54,10 +67,10 @@ const AdminPage = () => {
             </Stack> 
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
            
-          <Button sx={{backgroundColor: 'cornflowerblue'}} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button onClick={newDepartmentHandler} sx={{backgroundColor: 'cornflowerblue'}} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
             New Department
           </Button>
-          <Button sx={{backgroundColor: 'cornflowerblue'}} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button onClick={newSudentHandler} sx={{backgroundColor: 'cornflowerblue'}} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
             New Student
           </Button>
             </Stack>

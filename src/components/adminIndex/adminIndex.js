@@ -1,4 +1,3 @@
-
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
@@ -32,155 +31,143 @@ import Scrollbar from '../scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from '../../sections/dashboard/user';
 
-
-
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-    { id: 'firstname', label: 'First Name', alignItems: true },
-    { id: 'lastname', label: 'Last Name', alignItems: true },
-    { id: 'studentId', label: 'Student ID', alignItems: true },
-    { id: 'department', label: 'Department', alignItems: true },
-    { id: 'gender', label: 'Gender', alignItems: true },
-    { id: 'level', label: 'Level', alignItems: true },
-    
-  ];  
+  { id: 'firstname', label: 'First Name', alignItems: true },
+  { id: 'lastname', label: 'Last Name', alignItems: true },
+  { id: 'studentId', label: 'Student ID', alignItems: true },
+  { id: 'department', label: 'Department', alignItems: true },
+  { id: 'gender', label: 'Gender', alignItems: true },
+  { id: 'level', label: 'Level', alignItems: true },
+];
 
- 
-
-  const response = [{
-    _id: "0d5bd8967f299bd54f5c4d39",
-    firstName: "Danladii",
-    lastName: "Mustafar",
-    email: "egerald344@gmail.com",
-    gender: "Male",
+const response = [
+  {
+    _id: '0d5bd8967f299bd54f5c4d39',
+    firstName: 'Danladii',
+    lastName: 'Mustafar',
+    email: 'egerald344@gmail.com',
+    gender: 'Male',
     studentId: 43900,
-    origin: "Abuja",
-    department: "Physic",
-    courses: [
-        "PHY101",
-        "PHY103",
-        "PHY105",
-        "PHY107",
-        "GST100"
-    ],
-    address: "Kubwa",
-    atClass: 0
-},
-]
+    origin: 'Abuja',
+    department: 'Physic',
+    courses: ['PHY101', 'PHY103', 'PHY105', 'PHY107', 'GST100'],
+    address: 'Kubwa',
+    atClass: 0,
+  },
+];
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-      return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-      return 1;
-    }
-    return 0;
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
   }
-  
-  function getComparator(order, orderBy) {
-    return order === 'desc'
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy);
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
   }
-  
-  function applySortFilter(array, comparator, query) {
-    const stabilizedThis = array?.map((el, index) => [el, index]);
-    stabilizedThis?.sort((a, b) => {
-      const order = comparator(a[0], b[0]);
-      if (order !== 0) return order;
-      return a[1] - b[1];
-    });
-    if (query) {
-      return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+  return 0;
+}
+
+function getComparator(order, orderBy) {
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+function applySortFilter(array, comparator, query) {
+  const stabilizedThis = array?.map((el, index) => [el, index]);
+  stabilizedThis?.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  if (query) {
+    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+  }
+  return stabilizedThis?.map((el) => el[0]);
+}
+
+export default function AdminIndex({ responseData }) {
+  const navigate = useNavigate();
+
+  const [open, setOpen] = useState(null);
+
+  const [page, setPage] = useState(0);
+
+  const [order, setOrder] = useState('asc');
+
+  const [selected, setSelected] = useState([]);
+
+  const [orderBy, setOrderBy] = useState('firstname');
+
+  const [filterName, setFilterName] = useState('');
+
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleOpenMenu = (event) => {
+    setOpen(event.currentTarget);
+
+    console.log(event);
+  };
+
+  const handleCloseMenu = () => {
+    setOpen(null);
+  };
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelecteds = responseData.map((n) => n.firstName);
+      setSelected(newSelecteds);
+      return;
     }
-    return stabilizedThis?.map((el) => el[0]);
-  }
-  
-export default function AdminIndex({responseData}) {
-    const navigate = useNavigate()
-    
-    const [open, setOpen] = useState(null);
-  
-    const [page, setPage] = useState(0);
-  
-    const [order, setOrder] = useState('asc');
-  
-    const [selected, setSelected] = useState([]);
-  
-    const [orderBy, setOrderBy] = useState('firstname');
-  
-    const [filterName, setFilterName] = useState('');
-  
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    setSelected([]);
+  };
 
- 
-    const handleOpenMenu = (event) => {
-      setOpen(event.currentTarget);
+  const handleClick = (event, name) => {
+    const selectedIndex = selected.indexOf(name);
+    let newSelected = [];
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+    }
+    setSelected(newSelected);
+  };
 
-      console.log(event)
-    };
-  
-    const handleCloseMenu = () => {
-      setOpen(null);
-    };
-  
-    const handleRequestSort = (event, property) => {
-      const isAsc = orderBy === property && order === 'asc';
-      setOrder(isAsc ? 'desc' : 'asc');
-      setOrderBy(property);
-    };
-  
-    const handleSelectAllClick = (event) => {
-      if (event.target.checked) {
-        const newSelecteds = responseData.map((n) => n.firstName);
-        setSelected(newSelecteds);
-        return;
-      }
-      setSelected([]);
-    };
-  
-    const handleClick = (event, name) => {
-      const selectedIndex = selected.indexOf(name);
-      let newSelected = [];
-      if (selectedIndex === -1) {
-        newSelected = newSelected.concat(selected, name);
-      } else if (selectedIndex === 0) {
-        newSelected = newSelected.concat(selected.slice(1));
-      } else if (selectedIndex === selected.length - 1) {
-        newSelected = newSelected.concat(selected.slice(0, -1));
-      } else if (selectedIndex > 0) {
-        newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-      }
-      setSelected(newSelected);
-    };
-  
-    const handleChangePage = (event, newPage) => {
-      setPage(newPage);
-    };
-  
-    const handleChangeRowsPerPage = (event) => {
-      setPage(0);
-      setRowsPerPage(parseInt(event.target.value, 10));
-    };
-  
-    const handleFilterByName = (event) => {
-      setPage(0);
-      setFilterName(event.target.value);
-    };
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
-  
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - responseData.length) : 0;
-  
-    const filteredUsers = applySortFilter(responseData, getComparator(order, orderBy), filterName);
-  
-    const isNotFound = !filteredUsers?.length && !!filterName;
-  console.log(responseData)
-return (
+  const handleChangeRowsPerPage = (event) => {
+    setPage(0);
+    setRowsPerPage(parseInt(event.target.value, 10));
+  };
+
+  const handleFilterByName = (event) => {
+    setPage(0);
+    setFilterName(event.target.value);
+  };
+
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - responseData.length) : 0;
+
+  const filteredUsers = applySortFilter(responseData, getComparator(order, orderBy), filterName);
+
+  const isNotFound = !filteredUsers?.length && !!filterName;
+  console.log(responseData);
+  return (
     <>
-    <Container>
+      <Container>
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
           <Scrollbar>
@@ -201,16 +188,14 @@ return (
                     const selectedUser = selected.indexOf(firstName) !== -1;
                     const dept = department.toUpperCase();
                     return (
-                      
-                      <TableRow hover key={_id} tabIndex={-1} role="checkbox" selected={selectedUser} >
-                          
+                      <TableRow hover key={_id} tabIndex={-1} role="checkbox" selected={selectedUser}>
                         <TableCell padding="checkbox">
-                          {/* <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, firstName)} /> */}
+                          <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, firstName)} />
                         </TableCell>
 
-                        <TableCell component="th" alignitems='center' scope="row" padding='normal' >
+                        <TableCell component="th" alignitems="center" scope="row" padding="normal">
                           <Stack direction="row" alignItems="center" spacing={1}>
-                            <Typography variant="subtitle2" noWrap >
+                            <Typography variant="subtitle2" noWrap>
                               {firstName}
                             </Typography>
                           </Stack>
@@ -222,22 +207,16 @@ return (
 
                         <TableCell align="center">{dept}</TableCell>
 
-                        <TableCell align="center">
-                          {gender}
-                        </TableCell>
+                        <TableCell align="center">{gender}</TableCell>
 
-                        <TableCell align="center">
-                          100
-                        </TableCell>
+                        <TableCell align="center">100</TableCell>
 
                         <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
                             <Iconify icon={'eva:more-vertical-fill'} />
                           </IconButton>
                         </TableCell>
-                        
                       </TableRow>
-                      
                     );
                   })}
                   {emptyRows > 0 && (
@@ -286,33 +265,33 @@ return (
         </Card>
       </Container>
       <Popover
-      open={Boolean(open)}
-      anchorEl={open}
-      onClose={handleCloseMenu}
-      anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-      PaperProps={{
-        sx: {
-          p: 1,
-          width: 140,
-          '& .MuiMenuItem-root': {
-            px: 1,
-            typography: 'body2',
-            borderRadius: 0.75,
+        open={Boolean(open)}
+        anchorEl={open}
+        onClose={handleCloseMenu}
+        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        PaperProps={{
+          sx: {
+            p: 1,
+            width: 140,
+            '& .MuiMenuItem-root': {
+              px: 1,
+              typography: 'body2',
+              borderRadius: 0.75,
+            },
           },
-        },
-      }}
-    >
-      <MenuItem>
-        <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-        Edit
-      </MenuItem>
+        }}
+      >
+        <MenuItem>
+          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
+          Edit
+        </MenuItem>
 
-      <MenuItem sx={{ color: 'error.main' }}>
-        <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
-        Delete
-      </MenuItem>
-    </Popover>
-  </>
-);
+        <MenuItem sx={{ color: 'error.main' }}>
+          <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
+          Delete
+        </MenuItem>
+      </Popover>
+    </>
+  );
 }
