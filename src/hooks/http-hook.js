@@ -5,7 +5,7 @@ import { useState, useCallback, useEffect } from 'react';
 export const useHttpClient = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  
+  const [resMessage, setResMessage] = useState();
   
 
   const sendRequest = useCallback(
@@ -20,12 +20,12 @@ export const useHttpClient = () => {
         });
 
         const responseData = await response.data;
-        setError(responseData)
+        
         if (!response.status === 200) {
           
           throw new Error(responseData.message);
         }
-
+        setResMessage(responseData)
         setIsLoading(false);
         
         return responseData;
@@ -41,12 +41,12 @@ export const useHttpClient = () => {
 
   const clearError = () => {
     setError(null);
-    
+    setResMessage(null);
   };
 
   useEffect(() => {
     // 
   }, []);
 
-  return { isLoading, error, sendRequest, clearError,  };
+  return { isLoading, error, sendRequest, clearError, resMessage };
 };

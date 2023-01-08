@@ -211,11 +211,7 @@ export default function AdminIndex({ responseData }) {
 
                         <TableCell align="center">100</TableCell>
 
-                        <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
-                            <Iconify icon={'eva:more-vertical-fill'} />
-                          </IconButton>
-                        </TableCell>
+                        
                       </TableRow>
                     );
                   })}

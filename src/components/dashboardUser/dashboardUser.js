@@ -1,9 +1,7 @@
-
-import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
-import { sentenceCase } from 'change-case';
+
 import { useState } from 'react';
-import axios from 'axios';
+
 import { useNavigate } from 'react-router-dom';
 // @mui
 import {
@@ -11,12 +9,7 @@ import {
   Table,
   Stack,
   Paper,
-  Avatar,
-  Button,
-  Popover,
-  Checkbox,
   TableRow,
-  MenuItem,
   TableBody,
   TableCell,
   Container,
@@ -26,168 +19,132 @@ import {
   TablePagination,
 } from '@mui/material';
 // components
-import Label from '../label';
+
 import Iconify from '../iconify';
 import Scrollbar from '../scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from '../../sections/dashboard/user';
 
-
-
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-    { id: 'firstname', label: 'First Name', alignItems: true },
-    { id: 'lastname', label: 'Last Name', alignItems: true },
-    { id: 'studentId', label: 'Student ID', alignItems: true },
-    { id: 'department', label: 'Department', alignItems: true },
-    { id: 'gender', label: 'Gender', alignItems: true },
-    { id: 'level', label: 'Level', alignItems: true },
-    
-  ];  
+  { id: 'firstname', label: 'First Name', alignItems: true },
+  { id: 'lastname', label: 'Last Name', alignItems: true },
+  { id: 'studentId', label: 'Student ID', alignItems: true },
+  { id: 'department', label: 'Department', alignItems: true },
+  { id: 'gender', label: 'Gender', alignItems: true },
+  { id: 'level', label: 'Level', alignItems: true },
+];
 
- 
-
-  const response = [{
-    _id: "0d5bd8967f299bd54f5c4d39",
-    firstName: "Danladii",
-    lastName: "Mustafar",
-    email: "egerald344@gmail.com",
-    gender: "Male",
+const response = [
+  {
+    _id: '0d5bd8967f299bd54f5c4d39',
+    firstName: 'Danladii',
+    lastName: 'Mustafar',
+    email: 'egerald344@gmail.com',
+    gender: 'Male',
     studentId: 43900,
-    origin: "Abuja",
-    department: "Physic",
-    courses: [
-        "PHY101",
-        "PHY103",
-        "PHY105",
-        "PHY107",
-        "GST100"
-    ],
-    address: "Kubwa",
-    atClass: 0
-},
-]
+    origin: 'Abuja',
+    department: 'Physic',
+    courses: ['PHY101', 'PHY103', 'PHY105', 'PHY107', 'GST100'],
+    address: 'Kubwa',
+    atClass: 0,
+  },
+];
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
-    if (b[orderBy] < a[orderBy]) {
-      return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-      return 1;
-    }
-    return 0;
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
   }
-  
-  function getComparator(order, orderBy) {
-    return order === 'desc'
-      ? (a, b) => descendingComparator(a, b, orderBy)
-      : (a, b) => -descendingComparator(a, b, orderBy);
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
   }
-  
-  function applySortFilter(array, comparator, query) {
-    const stabilizedThis = array?.map((el, index) => [el, index]);
-    stabilizedThis?.sort((a, b) => {
-      const order = comparator(a[0], b[0]);
-      if (order !== 0) return order;
-      return a[1] - b[1];
-    });
-    if (query) {
-      return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+  return 0;
+}
+
+function getComparator(order, orderBy) {
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+function applySortFilter(array, comparator, query) {
+  const stabilizedThis = array?.map((el, index) => [el, index]);
+  stabilizedThis?.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  if (query) {
+    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+  }
+  return stabilizedThis?.map((el) => el[0]);
+}
+
+export default function DashboardUser({ responseData }) {
+  const navigate = useNavigate();
+
+  const [open, setOpen] = useState(null);
+
+  const [page, setPage] = useState(0);
+
+  const [order, setOrder] = useState('asc');
+
+  const [selected, setSelected] = useState([]);
+
+  const [orderBy, setOrderBy] = useState('firstname');
+
+  const [filterName, setFilterName] = useState('');
+
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelecteds = responseData.map((n) => n.firstName);
+      setSelected(newSelecteds);
+      return;
     }
-    return stabilizedThis?.map((el) => el[0]);
-  }
-  
-export default function DashboardUser({responseData}) {
-    const navigate = useNavigate()
-    
-    const [open, setOpen] = useState(null);
-  
-    const [page, setPage] = useState(0);
-  
-    const [order, setOrder] = useState('asc');
-  
-    const [selected, setSelected] = useState([]);
-  
-    const [orderBy, setOrderBy] = useState('firstname');
-  
-    const [filterName, setFilterName] = useState('');
-  
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    setSelected([]);
+  };
 
- 
-    const handleOpenMenu = (event) => {
-      setOpen(event.currentTarget);
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
-      console.log(event)
-    };
-  
-    const handleCloseMenu = () => {
-      setOpen(null);
-    };
-  
-    const handleRequestSort = (event, property) => {
-      const isAsc = orderBy === property && order === 'asc';
-      setOrder(isAsc ? 'desc' : 'asc');
-      setOrderBy(property);
-    };
-  
-    const handleSelectAllClick = (event) => {
-      if (event.target.checked) {
-        const newSelecteds = responseData.map((n) => n.firstName);
-        setSelected(newSelecteds);
-        return;
-      }
-      setSelected([]);
-    };
-  
-    const handleClick = (event, name) => {
-      const selectedIndex = selected.indexOf(name);
-      let newSelected = [];
-      if (selectedIndex === -1) {
-        newSelected = newSelected.concat(selected, name);
-      } else if (selectedIndex === 0) {
-        newSelected = newSelected.concat(selected.slice(1));
-      } else if (selectedIndex === selected.length - 1) {
-        newSelected = newSelected.concat(selected.slice(0, -1));
-      } else if (selectedIndex > 0) {
-        newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-      }
-      setSelected(newSelected);
-    };
-  
-    const handleChangePage = (event, newPage) => {
-      setPage(newPage);
-    };
-  
-    const handleChangeRowsPerPage = (event) => {
-      setPage(0);
-      setRowsPerPage(parseInt(event.target.value, 10));
-    };
-  
-    const handleFilterByName = (event) => {
-      setPage(0);
-      setFilterName(event.target.value);
-    };
+  const handleChangeRowsPerPage = (event) => {
+    setPage(0);
+    setRowsPerPage(parseInt(event.target.value, 10));
+  };
 
-    const userHandler = (e, id) => {
-        navigate(`/dashboard/student/${id}`, { replace: true });
-    } 
-  
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - responseData.length) : 0;
-  
-    const filteredUsers = applySortFilter(responseData, getComparator(order, orderBy), filterName);
-  
-    const isNotFound = !filteredUsers?.length && !!filterName;
-  console.log(responseData)
-return (
+  const handleFilterByName = (event) => {
+    setPage(0);
+    setFilterName(event.target.value);
+  };
+
+  const userHandler = (e, id) => {
+    navigate(`/dashboard/student/${id}`, { replace: true });
+  };
+
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - responseData.length) : 0;
+
+  const filteredUsers = applySortFilter(responseData, getComparator(order, orderBy), filterName);
+
+  const isNotFound = !filteredUsers?.length && !!filterName;
+
+  return (
     <>
-    <Container>
+      <Container>
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
           <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
+            <TableContainer sx={{ minWidth: 800, color: '#000080'}}>
               <Table>
                 <UserListHead
                   order={order}
@@ -204,16 +161,21 @@ return (
                     const selectedUser = selected.indexOf(firstName) !== -1;
                     const dept = department.toUpperCase();
                     return (
-                      
-                      <TableRow hover key={_id} tabIndex={-1} role="checkbox" selected={selectedUser} onClick={(e) => userHandler( e, _id)}>
-                          
+                      <TableRow
+                        hover
+                        key={_id}
+                        tabIndex={-1}
+                        role="checkbox"
+                        selected={selectedUser}
+                        onClick={(e) => userHandler(e, _id)}
+                      >
                         <TableCell padding="checkbox">
                           {/* <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, firstName)} /> */}
                         </TableCell>
 
-                        <TableCell component="th" alignitems='center' scope="row" padding='normal' >
+                        <TableCell component="th" alignitems="center" scope="row" padding="normal">
                           <Stack direction="row" alignItems="center" spacing={1}>
-                            <Typography variant="subtitle2" noWrap >
+                            <Typography variant="subtitle2" noWrap>
                               {firstName}
                             </Typography>
                           </Stack>
@@ -225,22 +187,10 @@ return (
 
                         <TableCell align="center">{dept}</TableCell>
 
-                        <TableCell align="center">
-                          {gender}
-                        </TableCell>
+                        <TableCell align="center">{gender}</TableCell>
 
-                        <TableCell align="center">
-                          100
-                        </TableCell>
-
-                        <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
-                            <Iconify icon={'eva:more-vertical-fill'} />
-                          </IconButton>
-                        </TableCell>
-                        
+                        <TableCell align="center">100</TableCell>
                       </TableRow>
-                      
                     );
                   })}
                   {emptyRows > 0 && (
@@ -316,6 +266,6 @@ return (
         Delete
       </MenuItem>
     </Popover> */}
-  </>
-);
+    </>
+  );
 }

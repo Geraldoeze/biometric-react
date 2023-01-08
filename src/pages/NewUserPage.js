@@ -5,11 +5,12 @@ import { Container, Typography, Stack } from '@mui/material';
 
 import { NewUserForm } from '../sections/admin/newUser'
 import { useHttpClient } from '../hooks/http-hook';
+import ErrorModal from '../UIElement/Modal/ErrorModal';
 
 const NewUserPage = () => {
     const [ response, setResponse ] = useState(); 
 
-    const { isLoading, error, sendRequest } = useHttpClient();
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
       // fetch department data
   useEffect(() => {
@@ -33,10 +34,11 @@ const NewUserPage = () => {
 
       <Container maxWidth="xl">
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={3}>
-          <Typography variant="h4" gutterBottom>
+          <Typography sx={{color: '#000080'}} variant="h4" gutterBottom>
             New student
           </Typography>
         </Stack>
+        < ErrorModal open={error} error={error} onClose={clearError} response={null}/>
         <NewUserForm dept={response} />
       </Container>
         

@@ -17,6 +17,7 @@ import Page404 from './pages/Page404';
 
 import AdminPage from './pages/AdminPage';
 import NewUserPage from './pages/NewUserPage';
+import EditUserPage from './pages/EditUserPage';
 import DepartmentPage from './pages/DepartmentPage';
 
 import DashboardAppPage from './pages/DashboardAppPage';
@@ -55,7 +56,8 @@ export default function Router() {
         { element: <Navigate to="/admin/index" />, index: true},
         { path: 'index', element: <AdminPage />},
         { path: 'new', element:  <NewUserPage />   },
-        { path: 'department', element: <DepartmentPage /> }
+        { path: 'editStudent/:uid', element: <EditUserPage /> },
+        { path: 'department', element: <DepartmentPage /> },
         // { path: 'attendance', element:  <UserssPage />   },
       ],
     },

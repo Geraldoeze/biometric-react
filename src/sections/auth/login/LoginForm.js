@@ -2,14 +2,15 @@ import { Box, TextField } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import {  object, string } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import { LoadingButton } from '@mui/lab';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { AuthContext } from '../../../context/auth-context';
 import { useHttpClient } from '../../../hooks/http-hook';
 
-import Modal from '../../../UIElement/Modal/Modal';
+
+import ErrorModal from '../../../UIElement/Modal/ErrorModal';
 import LoadingSpinner from '../../../UIElement/LoadingSpinner';
   
   const registerSchema = object({
@@ -23,8 +24,8 @@ import LoadingSpinner from '../../../UIElement/LoadingSpinner';
   const LoginForm = () => {
     const auth = useContext(AuthContext);
     const navigate = useNavigate();
-    const { state } = useLocation();
-    const [loading, setLoading] = useState(false);
+    
+    
     const { isLoading, error, sendRequest, clearError, } = useHttpClient();
     const {
       register,
@@ -52,12 +53,12 @@ import LoadingSpinner from '../../../UIElement/LoadingSpinner';
         console.log(err);
       }
     }; 
-    console.log(errors);
+    
   
     return (
       <>
       {isLoading && <LoadingSpinner asOverlay />}
-      <Modal error={error} onClose={clearError} res={null} closeRes={() => {}} /> 
+      <ErrorModal error={error} open={error} onClose={clearError} response={null}  /> 
       <Box sx={{ maxWidth: '30rem' }}>
         <Box
           component='form'
@@ -89,7 +90,7 @@ import LoadingSpinner from '../../../UIElement/LoadingSpinner';
             variant='contained'
             fullWidth
             type='submit'
-            loading={loading}
+            
             sx={{ py: '0.8rem', mt: '1rem' }}
           >
             Login

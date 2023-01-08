@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../context/auth-context';
 import { useHttpClient } from '../../../hooks/http-hook';
 
-import Modal from '../../../UIElement/Modal/Modal';
+import ErrorModal from '../../../UIElement/Modal/ErrorModal';
 import LoadingSpinner from '../../../UIElement/LoadingSpinner';
   
   const registerSchema = object({
@@ -20,9 +20,9 @@ import LoadingSpinner from '../../../UIElement/LoadingSpinner';
   const ForgotPasswordForm = () => {
     const auth = useContext(AuthContext);
     const navigate = useNavigate();
-    const [ response,setResponse] = useState();
-    const [loading, setLoading] = useState(false);
-    const { isLoading, error, sendRequest, clearError, } = useHttpClient();
+    
+    
+    const { isLoading, error, sendRequest, clearError, resMessage} = useHttpClient();
     const {
       register,
       formState: { errors, isSubmitSuccessful },
@@ -43,20 +43,17 @@ import LoadingSpinner from '../../../UIElement/LoadingSpinner';
       const data = {...values, redirectUrl: `${window.location.origin}/auth/resetPassword`}
       try {
         const send = await sendRequest(`http://localhost:7000/auth/passwordReset`, 'POST', data);
-          setResponse(send)
+          
         } catch (err) {
           console.log(err.message, err.response)
         }
     }; 
     console.log(errors);
-    const closeRes = () => {
-      setResponse(null);
-    }
-
+    
     return (
       <>
-      {auth.isLoggedIn && <LoadingSpinner asOverlay />}
-      <Modal error={error} onClose={clearError} res={response} closeRes={closeRes} /> 
+      {isLoading && <LoadingSpinner asOverlay />}
+      <ErrorModal error={error} onClose={clearError} response={resMessage} open={error} /> 
       <Box sx={{ maxWidth: '30rem' }}>
         <Box
           component='form'
@@ -79,7 +76,7 @@ import LoadingSpinner from '../../../UIElement/LoadingSpinner';
             variant='contained'
             fullWidth
             type='submit'
-            loading={loading}
+            
             sx={{ py: '0.8rem', mt: '1rem' }}
           >
             Submit

@@ -12,12 +12,12 @@ import { AuthContext } from '../context/auth-context';
 import { useHttpClient } from '../hooks/http-hook';
 
 import LoadingSpinner from '../UIElement/LoadingSpinner';
-
+import ErrorModal from '../UIElement/Modal/ErrorModal'
 
 const AdminPage = () => {
     const [ response, setResponse ] = useState(); 
     const auth = useContext(AuthContext);
-    const { isLoading, error, sendRequest } = useHttpClient();
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
     const navigate = useNavigate();
 
 
@@ -67,15 +67,16 @@ const AdminPage = () => {
             </Stack> 
             <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
            
-          <Button onClick={newDepartmentHandler} sx={{backgroundColor: 'cornflowerblue'}} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New Department
+          <Button onClick={newDepartmentHandler} sx={{backgroundColor: '#14162F'}} variant="contained" >
+            Department List
           </Button>
-          <Button onClick={newSudentHandler} sx={{backgroundColor: 'cornflowerblue'}} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button onClick={newSudentHandler} sx={{backgroundColor: '#14162F'}} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
             New Student
           </Button>
             </Stack>
             <Stack direction="column" alignItems="center" justifyContent="space-between" mb={5}>
               {isLoading && <LoadingSpinner />}
+              <ErrorModal error={error} onClose={clearError} open={error} response={null} />
                {response && <AdminIndex responseData={response} />}
             </Stack>
             </Container>

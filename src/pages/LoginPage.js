@@ -65,7 +65,7 @@ export default function LoginPage() {
      
         <Container maxWidth="sm">
           <StyledContent>
-            <Typography variant="h4" gutterBottom>
+            <Typography sx={{color: '#000080'}} variant="h4" gutterBottom>
               {switchPage ? 'Signup' : 'Login'}
             </Typography>
 

@@ -42,7 +42,8 @@ function NavItem({ item }) {
       sx={{
         '&.active': {
           color: 'text.primary',
-          bgcolor: 'action.selected',
+          bgvolor: '#14162F'
+          // bgcolor: 'action.selected',
           fontWeight: 'fontWeightBold',
         },
       }}

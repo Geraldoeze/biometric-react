@@ -32,11 +32,11 @@ export default function ForgotPasswordPage() {
       <StyledRoot>
         <Container maxWidth="sm">
           <StyledContent>
-            <Typography variant="h4" gutterBottom>
+            <Typography sx={{color: '#000080'}} variant="h4" gutterBottom>
               Forgot Password
             </Typography>
 
-            <Typography variant="h5" sx={{ mb: 5 }}>
+            <Typography variant="h5" sx={{ mb: 5, color: '#000060' }}>
               Enter your Email Address
             </Typography>
             <ForgotPasswordForm />

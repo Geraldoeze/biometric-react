@@ -32,10 +32,10 @@ export default function ResetPasswordPage() {
       <StyledRoot>
         <Container maxWidth="sm">
           <StyledContent>
-            <Typography variant="h4" gutterBottom>
+            <Typography sx={{color: '#000080'}} variant="h4" gutterBottom>
               Reset Password
             </Typography>
-            <Typography variant="subtitle1" gutterBottom>
+            <Typography sx={{color: '#000080'}} variant="subtitle1" gutterBottom>
               Enter new password
             </Typography>
             <ResetPasswordForm />
