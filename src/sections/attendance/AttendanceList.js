@@ -3,13 +3,17 @@ import { Box, TextField, Stack, Button, Typography, Container, Popover, IconButt
 
 import { styled } from '@mui/material/styles';
 
-import { useHttpClient } from '../../../hooks/http-hook';
-import LoadingSpinner from '../../../UIElement/LoadingSpinner';
+import { useHttpClient } from '../../hooks/http-hook';
+import LoadingSpinner from '../../UIElement/LoadingSpinner';
 
-import NewDepartment from './NewDepartment';
-import EditDepartment from './EditDepartment';
+import AttenDance from './Atten-dance';
+import NewAttendance from './NewAttendance';
+import CloseAttendance from './CloseAttendance';
+
+
 
 const RandomId = 100000 + Math.floor(Math.random() * 900000);
+
 const StyledDiv = styled('div')(({ theme }) => ({
   margin: '1rem',
   backgroundColor: '#14162F',
@@ -19,7 +23,7 @@ const StyledDiv = styled('div')(({ theme }) => ({
   cursor: 'pointer',
 }));
 
-const DepartmentList = () => {
+const AttendanceList = () => {
   const [response, setResponse] = useState();
   const [open, setOpen] = useState(null);
   const [edit, setEdit] = useState(false);
@@ -27,18 +31,18 @@ const DepartmentList = () => {
   const [openModal, setOpenModal] = useState(false);
   const { isLoading, sendRequest, error, clearError } = useHttpClient();
 
-  // fetch department data
+  // fetch attendance data
   useEffect(() => {
-    const getData = async () => {
+    const getAttendance = async () => {
       try {
-        const send = await sendRequest(`http://localhost:7000/admin/getDept`);
+        const send = await sendRequest(`http://localhost:7000/users/attendanceList`);
         setResponse(send.response);
         console.log(send);
       } catch (err) {
         console.log(err);
       }
     };
-    getData();
+    getAttendance();
   }, []);
 
   const handleClickOpen = () => {
@@ -51,13 +55,14 @@ const DepartmentList = () => {
     setEdit(false);
   };
   const onClickHandler = (e, val) => {
+      console.log(val)
     setEditValue(val);
     setEdit(true);
   };
 
   // get new contents created
   const getNewState = (value) => {
-    const newValue = { ...value, _id: RandomId.toString() };
+    const newValue = {...value, _id: RandomId.toString() };
     setResponse([...response, newValue]);
   };
 
@@ -79,9 +84,9 @@ const DepartmentList = () => {
 
   return (
     <>
-      <NewDepartment open={openModal} onClose={handleClose} updateContent={getNewState} />
+      {openModal && <NewAttendance open={openModal} onClose={handleClose} updateContent={getNewState} /> }
       {edit && (
-        <EditDepartment
+        <CloseAttendance
           open={edit}
           onClose={closeEdit}
           values={editValue}
@@ -91,31 +96,19 @@ const DepartmentList = () => {
       )}
       <Container>
         <Stack direction="row" justifyContent="space-between" sx={{ my: 2 }}>
-          <Typography sx={{color: '#000080'}} variant="h5">List of Department</Typography>
+          <Typography sx={{color: '#000080'}} variant="h5">List of Attendance</Typography>
           <Button sx={{ mb: 1, backgroundColor: '#14162F' }} variant="outlined" onClick={handleClickOpen}>
-            New Department
+            New Attendance
           </Button>
         </Stack>
-        {isLoading && <LoadingSpinner asOverlay />}
-        {response &&
-          response?.map((val, ind, arr) => {
-            return (
-              <Container key={val._id}>
-                <StyledDiv onClick={(e) => onClickHandler(e, val)}>
-                  <Stack direction="column" justifyContent="space-between" sx={{ my: 2, px: 1 }}>
-                    <Typography variant="h6">Department : {val.department.toUpperCase()}</Typography>
-                    <Typography variant="h6">Courses : {val.courses.toString().split(',').join(', ')}</Typography>
-                  </Stack>
-                </StyledDiv>
-              </Container>
-            );
-          })}
+        {isLoading && <LoadingSpinner />}
+        
         {response?.length > 0 ? (
-          ''
+          <AttenDance responseData={response} closeAtt={onClickHandler} />
         ) : (
           <Stack direction="column" alignItems="center" justifyContent="space-between" sx={{ my: 5, p: 4 }}>
             <Typography textAlign="center" variant="h6">
-              No Department{' '}
+              No Attendance{' '}
             </Typography>
           </Stack>
         )}
@@ -124,4 +117,4 @@ const DepartmentList = () => {
   );
 };
 
-export default DepartmentList;
+export default AttendanceList;

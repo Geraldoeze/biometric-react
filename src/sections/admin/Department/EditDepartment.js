@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 
 import { useHttpClient } from '../../../hooks/http-hook';
+import LoadingSpinner from '../../../UIElement/LoadingSpinner';
 
 // initial reducer state
 const inputReducer = (state, action) => {
@@ -27,33 +28,21 @@ const inputReducer = (state, action) => {
 
 export default function EditDepartment({ values, open, onClose, updateContent, deleteCon }) {
   //   const [open, setOpen] = useState(false);
-  
+
   const [course, setCourse] = useState([]);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
   useEffect(() => {
     // Refresh the page
-    setCourse(values.courses)
+    setCourse(values.courses);
     console.log('');
   }, []);
 
   const [inputState, dispatch] = useReducer(inputReducer, {
     department: values ? values?.department : '',
     totalClasses: values ? values?.totalClasses : '',
-    _id: values._id
+    _id: values._id,
   });
-
-  const onSubmitHandler = async (e) => {
-    const newDepartmentData = { ...inputState, courses: [] };
-
-    try {
-      const send = await sendRequest(`http://localhost:7000/admin/createData`, 'POST', newDepartmentData);
-      console.log(send);
-    } catch (err) {
-      console.log(err);
-    }
-    onClose();
-  };
 
   const changeHandler = (e) => {
     dispatch({
@@ -64,30 +53,31 @@ export default function EditDepartment({ values, open, onClose, updateContent, d
   };
 
   const editHandler = async () => {
-    const newDepartmentData = {...inputState, courses: course}
-        if (newDepartmentData?.courses?.length >= 1) {
-            updateContent(newDepartmentData);
-        }
+    const newDepartmentData = { ...inputState, courses: course };
+    if (newDepartmentData?.courses?.length >= 1) {
+      updateContent(newDepartmentData);
+    }
 
-        try {
-            // const send = await sendRequest(`http://localhost:7000/admin/createData`, 'POST', newDepartmentData);
-            // console.log(send);
-          } catch (err) {
-            console.log(err);
-          }
-          onClose()  
+    try {
+      const send = await sendRequest(`http://localhost:7000/admin/editDept${inputState._id}`, 'PUT', newDepartmentData);
+      console.log(send);
+    } catch (err) {
+      console.log(err);
+    }
+    onClose();
   };
 
   const deleteHandler = async () => {
-    deleteCon(values._id)
-    
-    // const deleteDept = await sendRequest(`http://localhost:7000/admin/deleteDept/${id}`, 'DELETE');
-    // console.log(deleteDept);
-    onClose()
+    deleteCon(values._id);
+
+    const deleteDept = await sendRequest(`http://localhost:7000/admin/deleteDept/${values._id}`, 'DELETE');
+    console.log(deleteDept);
+    onClose();
   };
 
   return (
     <div>
+      { isLoading && <LoadingSpinner asOverlay />}
       <Dialog open={open} onClose={onClose}>
         <DialogTitle>Edit OR Delete Department</DialogTitle>
         <DialogContent>
@@ -105,7 +95,6 @@ export default function EditDepartment({ values, open, onClose, updateContent, d
           />
           <TextField
             size="small"
-            
             sx={{ m: 1, width: 400 }}
             id="course"
             name="courses"

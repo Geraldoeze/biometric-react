@@ -1,4 +1,11 @@
 import React, { useContext} from 'react';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
+import GridViewIcon from '@mui/icons-material/GridView';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+
+
 import { AuthContext } from '../../../context/auth-context'
 
 
@@ -19,27 +26,32 @@ const NavConfig = () => {
     {
       title: 'dashboard',
       path: '/dashboard/app',
-      icon: icon('ic_analytics'),
+      icon: <GridViewIcon />,
     },
-    {
-      title: 'student list',
-      path: '/dashboard/user',
-      icon: icon('ic_user'),
-    },
+    // {
+    //   title: 'student list',
+    //   path: '/dashboard/user',
+    //   icon: icon('ic_user'),
+    // },
     {
       title: 'new Student',
       path: '/admin/new',
-      icon: icon('ic_user'),
+      icon: <GroupAddIcon/>,
+    },
+    {
+      title: 'department',
+      path: '/admin/department',
+      icon: <AddCircleOutlineIcon/>,
     },
     {
       title: 'attendance',
-      path: '/admin/attendace',
-      icon: icon('ic_lock'),
+      path: '/attendance',
+      icon: <PlaylistAddCheckIcon/>,
     },
     {
       title: 'admin',
       path: '/admin',
-      icon: icon('ic_lock'),
+      icon: <AdminPanelSettingsIcon />,
     },
   ]
 

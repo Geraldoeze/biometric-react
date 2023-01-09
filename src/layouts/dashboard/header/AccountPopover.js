@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 // @mui
 import { alpha } from '@mui/material/styles';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
 // mocks_
 
@@ -63,7 +64,7 @@ export default function AccountPopover(props) {
       <IconButton
         onClick={handleOpen}
         sx={{
-          p: 0,
+          p: 1,
           ...(open && {
             '&:before': {
               zIndex: 1,
@@ -77,7 +78,7 @@ export default function AccountPopover(props) {
           }),
         }}
       >
-        <Avatar src={photoURL} alt="photoURL" />
+        <AccountCircleIcon fontSize='large'/>
       </IconButton>
 
       <Popover

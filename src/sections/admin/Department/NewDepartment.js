@@ -3,7 +3,7 @@ import { Button, TextField, Stack, Dialog, DialogActions, DialogContent, DialogC
 
 
 import { useHttpClient } from '../../../hooks/http-hook';
-
+import LoadingSpinner from '../../../UIElement/LoadingSpinner';
 
 
 // initial reducer state
@@ -60,6 +60,7 @@ const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
     return ( 
         <div>
+          {isLoading && <LoadingSpinner asOverlay />}
       <Dialog open={open} onClose={onClose}>
         <DialogTitle>Create Department</DialogTitle>
         <DialogContent>

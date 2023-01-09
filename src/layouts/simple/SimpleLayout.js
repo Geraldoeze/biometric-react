@@ -1,8 +1,10 @@
 import { Outlet } from 'react-router-dom';
+
 // @mui
 import { styled } from '@mui/material/styles';
+import FitbitIcon from '@mui/icons-material/Fitbit';
 // components
-import Logo from '../../components/logo';
+
 
 // ----------------------------------------------------------------------
 
@@ -11,6 +13,7 @@ const StyledHeader = styled('header')(({ theme }) => ({
   left: 0,
   lineHeight: 0,
   width: '100%',
+  color:  '#14162F',
   position: 'absolute',
   padding: theme.spacing(3, 3, 0),
   [theme.breakpoints.up('sm')]: {
@@ -24,7 +27,7 @@ export default function SimpleLayout() {
   return (
     <>
       <StyledHeader>
-        LOGO
+        <FitbitIcon  />
       </StyledHeader>
 
       <Outlet />

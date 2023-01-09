@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
 import { Box, Link, Drawer, Typography, Avatar } from '@mui/material';
+import FitbitIcon from '@mui/icons-material/Fitbit';
 
 // hooks
 import useResponsive from '../../../hooks/useResponsive';
@@ -53,9 +54,9 @@ export default function Nav({ openNav, onCloseNav }) {
       }}
     >
       <Box sx={{ px: 2.5, py: 3, display: 'inline-flex', }}>
-        <div>Logo</div>
+        <FitbitIcon />
       </Box>
-      {/* <NavSection data={NavConfig} /> */}
+      <NavSection data={NavConfig} />
       <Box sx={{ flexGrow: 1 }} />
     </Scrollbar>
   );

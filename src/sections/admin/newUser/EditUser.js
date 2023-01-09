@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext, useReducer } from 'react';
+import { useState, useContext, useReducer } from 'react';
 
 import {
   Box,
@@ -13,7 +13,7 @@ import {
   MenuItem,
   InputLabel,
 } from '@mui/material';
-import { useForm } from 'react-hook-form';
+
 
 import { LoadingButton } from '@mui/lab';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -22,7 +22,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../../../context/auth-context';
 import { useHttpClient } from '../../../hooks/http-hook';
 
-import Modal from '../../../UIElement/Modal/Modal';
+
 import LoadingSpinner from '../../../UIElement/LoadingSpinner';
 
 const RandomId = 100000 + Math.floor(Math.random() * 900000);
@@ -84,19 +84,18 @@ const EditUser = ({ user, dept }) => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log(inputState, course)
-    // const newUserData = {
-    //   ...inputState,
-    //   gender: sex,
-      
-    //   courses: course,
-    //   _id
-    //   atClass: 0,
-    // };
+    
+    const newUserData = {
+      ...inputState,
+      courses: course,
+      _id: user._id,
+      atClass: 0,
+    };
+    console.log(newUserData);
     try {
-      //   const send = await sendRequest(`http://localhost:7000/users/create`, 'POST', newUserData);
-      //   console.log(send);
-      //   navigate('/dashboard', { replace: true });
+        const sendEdit = await sendRequest(`http://localhost:7000/admin/update/${user._id}`, 'PUT', newUserData);
+        console.log(sendEdit);
+        navigate('/dashboard', { replace: true });
     } catch (err) {
       console.log(err);
     }
