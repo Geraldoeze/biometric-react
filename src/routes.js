@@ -1,8 +1,15 @@
+import { useContext } from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
+
+
+import RequireAuth from './requireAuth';
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
-//
+// context
+import { AuthContext } from './context/auth-context';
+
+
 import UserssPage from './pages/User_Page';
 
 import LoginPage from './pages/LoginPage';
@@ -24,6 +31,10 @@ import DashboardAppPage from './pages/DashboardAppPage';
 // ----------------------------------------------------------------------
 
 export default function Router() {
+const auth = useContext(AuthContext);
+const {isLoggedIn} = auth
+
+
   const routes = useRoutes([
     {
       path: '/auth',
@@ -36,14 +47,15 @@ export default function Router() {
         { path: 'resetPassword/:id/:id', element: <ResetPasswordPage /> },
       ],
     },
+
     {
       path: '/dashboard',
       element: <DashboardLayout />,
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
-        { path: 'app', element: <DashboardAppPage /> },
+        { path: 'app', element: <RequireAuth><DashboardAppPage /></RequireAuth> },
         // { path: 'user', element:  <UserPage/>   },
-        { path: 'student/:id', element: <UserssPage /> },
+        { path: 'student/:id', element: <RequireAuth><UserssPage /></RequireAuth> },
       ],
     },
     {
@@ -51,22 +63,39 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         { element: <Navigate to="/attendance/list" />, index: true },
-        { path: 'list', element: <UserAttendancePage /> },
+        { path: 'list', element: <RequireAuth><UserAttendancePage /></RequireAuth> },
       ],
     },
-
+    {
+      path: '/new',
+      element: <DashboardLayout />,
+      children: [
+        { element: <Navigate to="/new/user" />, index: true },
+        { path: 'user', element: <RequireAuth><NewUserPage /></RequireAuth> },
+      ],
+    },
+    {
+      path: '/create',
+      element: <DashboardLayout />,
+      children: [
+        { element: <Navigate to="/create/dept" />, index: true },
+        { path: 'dept', element: <RequireAuth><DepartmentPage /></RequireAuth> },
+      ],
+    },
+    
     {
       path: '/admin',
       element: <DashboardLayout />,
       children: [
         { element: <Navigate to="/admin/index" />, index: true },
-        { path: 'index', element: <AdminPage /> },
-        { path: 'new', element: <NewUserPage /> },
-        { path: 'editStudent/:uid', element: <EditUserPage /> },
-        { path: 'department', element: <DepartmentPage /> },
+        { path: 'index', element: <RequireAuth> <AdminPage /> </RequireAuth> },
+        
+        { path: 'editStudent/:uid', element: <RequireAuth><EditUserPage /></RequireAuth> },
+        
         // { path: 'attendance', element:  <UserssPage />   },
       ],
     },
+  
     {
       element: <SimpleLayout />,
       children: [

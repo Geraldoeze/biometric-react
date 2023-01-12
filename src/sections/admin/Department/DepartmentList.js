@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react';
-import { Box, TextField, Stack, Button, Typography, Container, Popover, IconButton, MenuItem } from '@mui/material';
+import { Stack, Button, Typography, Container,  } from '@mui/material';
+import { styled, alpha } from '@mui/material/styles';
 
-import { styled } from '@mui/material/styles';
 
 import { useHttpClient } from '../../../hooks/http-hook';
 import LoadingSpinner from '../../../UIElement/LoadingSpinner';
+import ErrorModal from '../../../UIElement/Modal/ErrorModal';
 
 import NewDepartment from './NewDepartment';
 import EditDepartment from './EditDepartment';
 
 const RandomId = 100000 + Math.floor(Math.random() * 900000);
-const StyledDiv = styled('div')(({ theme }) => ({
+const StyledDiv = styled('div')(() => ({
   margin: '1rem',
   backgroundColor: '#14162F',
   borderRadius: '10px',
@@ -19,9 +20,18 @@ const StyledDiv = styled('div')(({ theme }) => ({
   cursor: 'pointer',
 }));
 
+const StyledAccount = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing(2, 2.5),
+  borderRadius: Number(theme.shape.borderRadius) * 1.5,
+  backgroundColor: alpha(theme.palette.grey[500], 0.12),
+}));
+
+
 const DepartmentList = () => {
   const [response, setResponse] = useState();
-  const [open, setOpen] = useState(null);
+  
   const [edit, setEdit] = useState(false);
   const [editValue, setEditValue] = useState();
   const [openModal, setOpenModal] = useState(false);
@@ -44,7 +54,7 @@ const DepartmentList = () => {
   const handleClickOpen = () => {
     setOpenModal(true);
   };
-  const handleClose = (e) => {
+  const handleClose = () => {
     setOpenModal(false);
   };
   const closeEdit = () => {
@@ -57,7 +67,7 @@ const DepartmentList = () => {
 
   // get new contents created
   const getNewState = (value) => {
-    const newValue = { ...value, _id: RandomId.toString() };
+    const newValue = { ...value };
     setResponse([...response, newValue]);
   };
 
@@ -71,15 +81,14 @@ const DepartmentList = () => {
 
   // getDeletedContents
   const deleteContents = (id) => {
-    setResponse((response) => {
-      return response?.filter((del) => del._id !== id);
-    });
+    setResponse((response) => response?.filter((del) => del._id !== id));
     console.log(response);
   };
 
   return (
     <>
-      <NewDepartment open={openModal} onClose={handleClose} updateContent={getNewState} />
+     <ErrorModal error={error} onClose={clearError} response={null} open={error} /> 
+      {openModal && <NewDepartment open={openModal} onClose={handleClose} updateContent={getNewState} /> }
       {edit && (
         <EditDepartment
           open={edit}
@@ -98,8 +107,7 @@ const DepartmentList = () => {
         </Stack>
         {isLoading && <LoadingSpinner asOverlay />}
         {response &&
-          response?.map((val, ind, arr) => {
-            return (
+          response?.map((val) => (
               <Container key={val._id}>
                 <StyledDiv onClick={(e) => onClickHandler(e, val)}>
                   <Stack direction="column" justifyContent="space-between" sx={{ my: 2, px: 1 }}>
@@ -108,8 +116,9 @@ const DepartmentList = () => {
                   </Stack>
                 </StyledDiv>
               </Container>
-            );
-          })}
+            )
+          )
+        }
         {response?.length > 0 ? (
           ''
         ) : (

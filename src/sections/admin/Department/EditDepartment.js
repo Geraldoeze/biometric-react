@@ -2,16 +2,18 @@ import { useState, useReducer, useEffect } from 'react';
 import {
   Button,
   TextField,
-  Stack,
+  
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
 } from '@mui/material';
 
+import PropTypes  from 'prop-types';
+
 import { useHttpClient } from '../../../hooks/http-hook';
 import LoadingSpinner from '../../../UIElement/LoadingSpinner';
+import ErrorModal from '../../../UIElement/Modal/ErrorModal';
 
 // initial reducer state
 const inputReducer = (state, action) => {
@@ -25,6 +27,16 @@ const inputReducer = (state, action) => {
       return state;
   }
 };
+
+EditDepartment.propTypes = {
+  updateContent: PropTypes.func,
+  deleteCon: PropTypes.func,
+  onClose: PropTypes.func,
+  open: PropTypes.bool,
+  values: PropTypes.object
+};
+
+
 
 export default function EditDepartment({ values, open, onClose, updateContent, deleteCon }) {
   //   const [open, setOpen] = useState(false);
@@ -40,7 +52,6 @@ export default function EditDepartment({ values, open, onClose, updateContent, d
 
   const [inputState, dispatch] = useReducer(inputReducer, {
     department: values ? values?.department : '',
-    totalClasses: values ? values?.totalClasses : '',
     _id: values._id,
   });
 
@@ -59,7 +70,7 @@ export default function EditDepartment({ values, open, onClose, updateContent, d
     }
 
     try {
-      const send = await sendRequest(`http://localhost:7000/admin/editDept${inputState._id}`, 'PUT', newDepartmentData);
+      const send = await sendRequest(`http://localhost:7000/admin/editDept/${inputState._id}`, 'PUT', newDepartmentData);
       console.log(send);
     } catch (err) {
       console.log(err);
@@ -78,6 +89,7 @@ export default function EditDepartment({ values, open, onClose, updateContent, d
   return (
     <div>
       { isLoading && <LoadingSpinner asOverlay />}
+      <ErrorModal error={error} onClose={clearError} response={null} open={error} /> 
       <Dialog open={open} onClose={onClose}>
         <DialogTitle>Edit OR Delete Department</DialogTitle>
         <DialogContent>
@@ -105,18 +117,7 @@ export default function EditDepartment({ values, open, onClose, updateContent, d
             value={course}
           />
 
-          <TextField
-            autoFocus
-            sx={{ m: 1, width: 400 }}
-            name="totalClasses"
-            id="department"
-            label="Total Classes"
-            type="number"
-            value={inputState.totalClasses}
-            onChange={(e) => changeHandler(e)}
-            size="small"
-            variant="filled"
-          />
+          
         </DialogContent>
         <DialogActions>
           <Button onClick={editHandler}>EDIT</Button>

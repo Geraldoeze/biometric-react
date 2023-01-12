@@ -1,4 +1,4 @@
-import { useState, useContext, useReducer } from 'react';
+import { useState,  useReducer } from 'react';
 
 import {
   Box,
@@ -15,17 +15,14 @@ import {
 } from '@mui/material';
 
 
+
 import { LoadingButton } from '@mui/lab';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { AuthContext } from '../../../context/auth-context';
 import { useHttpClient } from '../../../hooks/http-hook';
 
-
 import LoadingSpinner from '../../../UIElement/LoadingSpinner';
-
-const RandomId = 100000 + Math.floor(Math.random() * 900000);
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -57,13 +54,8 @@ const inputReducer = (state, action) => {
 };
 
 const EditUser = ({ user, dept }) => {
-  const auth = useContext(AuthContext);
   const navigate = useNavigate();
-  const { state } = useLocation();
-  
-  const [loading, setLoading] = useState(false);
-  const [sex, setSex] = useState('');
-  const [depart, setDepart] = useState('');
+
   const [course, setCourse] = useState([]);
 
   const [inputState, dispatch] = useReducer(inputReducer, {
@@ -73,18 +65,17 @@ const EditUser = ({ user, dept }) => {
     address: user?.address,
     origin: user?.origin,
     gender: user?.gender,
-    department: user?.department
+    department: user?.department,
+    contact: user?.contact
   });
   console.log(user);
 
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   console.log(inputState.firstName);
 
-
-
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    
+
     const newUserData = {
       ...inputState,
       courses: course,
@@ -93,21 +84,14 @@ const EditUser = ({ user, dept }) => {
     };
     console.log(newUserData);
     try {
-        const sendEdit = await sendRequest(`http://localhost:7000/admin/update/${user._id}`, 'PUT', newUserData);
-        console.log(sendEdit);
-        navigate('/dashboard', { replace: true });
+      const sendEdit = await sendRequest(`http://localhost:7000/admin/update/${user._id}`, 'PUT', newUserData);
+      console.log(sendEdit);
+      navigate('/dashboard', { replace: true });
     } catch (err) {
       console.log(err);
     }
   };
 
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setSex(event.target.value);
-  };
-  const handleChangeDept = (event: SelectChangeEvent) => {
-    setDepart(event.target.value);
-  };
   const handleChangeCourse = (event: SelectChangeEvent<typeof course>) => {
     const {
       target: { value },
@@ -118,8 +102,6 @@ const EditUser = ({ user, dept }) => {
     );
   };
 
-
-
   const changeHandler = (e) => {
     dispatch({
       type: 'HANDLE_INPUT',
@@ -127,7 +109,6 @@ const EditUser = ({ user, dept }) => {
       payload: e.target.value,
     });
   };
-  
 
   return (
     <>
@@ -135,7 +116,7 @@ const EditUser = ({ user, dept }) => {
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Typography sx={{color: '#000080'}} variant="h6" gutterBottom>
+          <Typography sx={{ color: '#000080' }} variant="h6" gutterBottom>
             Update the Form below!
           </Typography>
         </Stack>
@@ -175,14 +156,12 @@ const EditUser = ({ user, dept }) => {
               />
               <Stack direction="column" justifyContent="space-between">
                 <FormControl sx={{ my: 2, width: 200 }}>
-                  <InputLabel id="demo-simple-select-helper-label" >
-                    Gender
-                  </InputLabel>
+                  <InputLabel id="demo-simple-select-helper-label">Gender</InputLabel>
                   <Select
                     labelId="demo-simple-select-helper-label"
                     id="gender"
                     value={inputState.gender}
-        name="gender"
+                    name="gender"
                     label="gender"
                     onChange={(e) => changeHandler(e)}
                   >
@@ -203,7 +182,7 @@ const EditUser = ({ user, dept }) => {
                     label="Department"
                     onChange={(e) => changeHandler(e)}
                   >
-                    {dept?.map((val, idx) => {
+                    {dept?.map((val) => {
                       return (
                         <MenuItem value={val.department} key={val._id}>
                           {val.department}
@@ -213,28 +192,30 @@ const EditUser = ({ user, dept }) => {
                   </Select>
                 </FormControl>
                 {/* { && ( */}
-                  <FormControl sx={{ my: 2, width: 300 }}>
-                    <InputLabel id="demo-simple-select-helper-label" name="course">Courses</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-helper-label"
-                      id="courses"
-                      multiple
-                      value={course}
-                      onChange={(e) => handleChangeCourse(e)}
-                      input={<OutlinedInput label="Courses" />}
-                      renderValue={(selected) => selected.join(', ')}
-                      MenuProps={MenuProps}
-                    >
-                      {dept
-                        ?.find((val, id) => val.department === inputState?.department)
-                        ?.courses.map((cors, idx) => (
-                          <MenuItem value={cors} key={idx}>
-                            <Checkbox checked={course.indexOf(cors) > -1} />
-                            <ListItemText primary={cors} />
-                          </MenuItem>
-                        ))}
-                    </Select>
-                  </FormControl>
+                <FormControl sx={{ my: 2, width: 300 }}>
+                  <InputLabel id="demo-simple-select-helper-label" name="course">
+                    Courses
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-helper-label"
+                    id="courses"
+                    multiple
+                    value={course}
+                    onChange={(e) => handleChangeCourse(e)}
+                    input={<OutlinedInput label="Courses" />}
+                    renderValue={(selected) => selected.join(', ')}
+                    MenuProps={MenuProps}
+                  >
+                    {dept
+                      ?.find((val) => val.department === inputState?.department)
+                      ?.courses.map((cors, idx) => (
+                        <MenuItem value={cors} key={idx}>
+                          <Checkbox checked={course.indexOf(cors) > -1} />
+                          <ListItemText primary={cors} />
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
                 {/* )} */}
               </Stack>
 
@@ -258,19 +239,16 @@ const EditUser = ({ user, dept }) => {
                 onChange={(e) => changeHandler(e)}
                 value={inputState.origin}
               />
+              <TextField sx={{ mb: 2 }} id="contact" name="contact" label="Phone No" fullWidth variant="outlined" onChange={(e) => changeHandler(e)} value={inputState.contact}/>
 
-              <LoadingButton
-                variant="contained"
-                fullWidth
-                type="submit"
-                loading={loading}
-                sx={{ py: '0.8rem', mt: '1rem' }}
-              >
+              <LoadingButton variant="contained" fullWidth type="submit" sx={{ py: '0.8rem', mt: '1rem' }}>
                 Submit
               </LoadingButton>
             </Box>
           </Box>
-        ) : ''}
+        ) : (
+          ''
+        )}
       </Container>
     </>
   );

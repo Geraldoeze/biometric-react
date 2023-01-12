@@ -1,12 +1,12 @@
-import { Box, TextField, Stack, Link } from '@mui/material';
+import { Box, TextField,  } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import {  object, string } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, } from 'react';
 import { LoadingButton } from '@mui/lab';
-import { useNavigate } from 'react-router-dom';
 
-import { AuthContext } from '../../../context/auth-context';
+
+
 import { useHttpClient } from '../../../hooks/http-hook';
 
 import ErrorModal from '../../../UIElement/Modal/ErrorModal';
@@ -18,8 +18,7 @@ import LoadingSpinner from '../../../UIElement/LoadingSpinner';
   
   
   const ForgotPasswordForm = () => {
-    const auth = useContext(AuthContext);
-    const navigate = useNavigate();
+   
     
     
     const { isLoading, error, sendRequest, clearError, resMessage} = useHttpClient();
@@ -42,7 +41,7 @@ import LoadingSpinner from '../../../UIElement/LoadingSpinner';
     const onSubmitHandler = async (values) => {
       const data = {...values, redirectUrl: `${window.location.origin}/auth/resetPassword`}
       try {
-        const send = await sendRequest(`http://localhost:7000/auth/passwordReset`, 'POST', data);
+        await sendRequest(`http://localhost:7000/auth/passwordReset`, 'POST', data);
           
         } catch (err) {
           console.log(err.message, err.response)

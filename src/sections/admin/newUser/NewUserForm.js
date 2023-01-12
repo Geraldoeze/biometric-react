@@ -13,7 +13,8 @@ import {
   MenuItem,
   InputLabel,
 } from '@mui/material';
-import { useForm } from 'react-hook-form';
+
+
 
 import { LoadingButton } from '@mui/lab';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -54,7 +55,6 @@ const inputReducer = (state, action) => {
 };
 
 
-
 const NewUserForm = ({ dept }) => {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
@@ -69,7 +69,8 @@ const NewUserForm = ({ dept }) => {
         lastName: '',
         email: '',
         address: '',
-        origin: ''
+        origin: '',
+        contact: ''
       });
 
   
@@ -78,8 +79,9 @@ const NewUserForm = ({ dept }) => {
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     const newUserData = {...inputState, gender: sex, department: depart,
-    courses: course, studentId: RandomId, atClass: 0
+    courses: course, atClass: 0
     }
+    console.log(newUserData)
         try {
           const send = await sendRequest(`http://localhost:7000/users/create`, 'POST', newUserData);
           console.log(send);
@@ -126,7 +128,7 @@ const NewUserForm = ({ dept }) => {
             Complete the Form below!
           </Typography>
         </Stack>
-        {dept ? (
+        {dept?.length >=1 ? (
           <Box sx={{ maxWidth: '30rem', alignItems: 'center' }} >
             <Box component="form" noValidate autoComplete="off" onSubmit={(e) => onSubmitHandler(e)}>
               <Stack direction="row" width="100%" alignItems="center" justifyContent="space-between">
@@ -195,6 +197,7 @@ const NewUserForm = ({ dept }) => {
 
               <TextField sx={{ mb: 2 }} id="address" name="address" label="Address" fullWidth variant="outlined" onChange={(e) => changeHandler(e)} value={inputState.address}/>
               <TextField sx={{ mb: 2 }} id="origin" name="origin" label="State of Origin" fullWidth variant="outlined" onChange={(e) => changeHandler(e)} value={inputState.origin}/>
+              <TextField sx={{ mb: 2 }} id="contact" name="contact" label="Phone No" fullWidth variant="outlined" onChange={(e) => changeHandler(e)} value={inputState.contact}/>
 
               <LoadingButton
                 variant="contained"
@@ -210,7 +213,7 @@ const NewUserForm = ({ dept }) => {
         ) : (
           <Stack direction="row" alignItems="center" justifyContent="space-between" my={2}>
             <Typography variant="h6" gutterBottom>
-              No Department Exist for Now, Try again later.
+              No Department Exist for Now, Create Department First. Try again later.
             </Typography>
           </Stack>
         )}

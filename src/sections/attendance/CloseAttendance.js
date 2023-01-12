@@ -1,14 +1,4 @@
-import { useState, useReducer, useEffect } from 'react';
-import {
-  Button,
-  Typography,
-  Stack,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from '@mui/material';
+import { Button, Typography, Stack, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
 import { useHttpClient } from '../../hooks/http-hook';
 import LoadingSpinner from '../../UIElement/LoadingSpinner';
@@ -18,11 +8,11 @@ const CloseAttendance = ({ open, onClose, values, updateContent }) => {
 
   const closeHandler = async () => {
     const id = values?._id;
-    const newVal = { ...values, attValue: 'close' };
-
+    const newVal = { ...values, attValue: 'close'};
+    const newValue = {...values}
     updateContent(newVal);
-    const closeValue = await sendRequest(`http://localhost:7000/users/closeAtt/${id}`, 'PUT', newVal);
-    console.log(closeValue)
+    // const send = await sendRequest(`http://localhost:7000/users/closeAtt/${id}`, 'PATCH', newValue);
+
     onClose();
   };
 
@@ -30,7 +20,7 @@ const CloseAttendance = ({ open, onClose, values, updateContent }) => {
     <div>
       {isLoading && <LoadingSpinner overlay />}
       <Dialog open={open} onClose={onClose}>
-        <DialogTitle>Close Attendance</DialogTitle>
+        <DialogTitle sx={{ color: '#000080' }}>Close Attendance</DialogTitle>
         <DialogContent>
           <Stack>
             <Typography sx={{ color: '#000080' }} variant="h5" gutterBottom>

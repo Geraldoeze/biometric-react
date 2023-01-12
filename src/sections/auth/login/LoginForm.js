@@ -45,6 +45,7 @@ import LoadingSpinner from '../../../UIElement/LoadingSpinner';
   
     const onSubmitHandler = async (values) => {
       try {
+        
         const send = await sendRequest(`http://localhost:7000/auth/login`, 'POST', values);
         console.log(send);
         auth.login(send.userDetails._id, send.token, send.userDetails)

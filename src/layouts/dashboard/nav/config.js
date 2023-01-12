@@ -28,19 +28,15 @@ const NavConfig = () => {
       path: '/dashboard/app',
       icon: <GridViewIcon />,
     },
-    // {
-    //   title: 'student list',
-    //   path: '/dashboard/user',
-    //   icon: icon('ic_user'),
-    // },
     {
       title: 'new Student',
-      path: '/admin/new',
+      path: "/new/user",
       icon: <GroupAddIcon/>,
     },
+
     {
       title: 'department',
-      path: '/admin/department',
+      path: '/create/dept',
       icon: <AddCircleOutlineIcon/>,
     },
     {
@@ -69,4 +65,4 @@ const NavConfig = () => {
  
 export default NavConfig;
 
-// export default navConfig;
+

@@ -1,6 +1,7 @@
 import { filter } from 'lodash';
 
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 import { useNavigate } from 'react-router-dom';
 // @mui
@@ -14,13 +15,12 @@ import {
   TableCell,
   Container,
   Typography,
-  IconButton,
   TableContainer,
   TablePagination,
 } from '@mui/material';
 // components
 
-import Iconify from '../iconify';
+// import Iconify from '../iconify';
 import Scrollbar from '../scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from '../../sections/dashboard/user';
@@ -36,21 +36,7 @@ const TABLE_HEAD = [
   { id: 'level', label: 'Level', alignItems: true },
 ];
 
-const response = [
-  {
-    _id: '0d5bd8967f299bd54f5c4d39',
-    firstName: 'Danladii',
-    lastName: 'Mustafar',
-    email: 'egerald344@gmail.com',
-    gender: 'Male',
-    studentId: 43900,
-    origin: 'Abuja',
-    department: 'Physic',
-    courses: ['PHY101', 'PHY103', 'PHY105', 'PHY107', 'GST100'],
-    address: 'Kubwa',
-    atClass: 0,
-  },
-];
+
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
@@ -77,15 +63,19 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) => _user.firstName.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis?.map((el) => el[0]);
 }
 
+DashboardUser.propTypes = {
+  responseData: PropTypes.array,
+};
+
 export default function DashboardUser({ responseData }) {
   const navigate = useNavigate();
 
-  const [open, setOpen] = useState(null);
+  // const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
 
@@ -107,7 +97,7 @@ export default function DashboardUser({ responseData }) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = responseData.map((n) => n.firstName);
+      const newSelecteds = responseData.map((n) => n._id);
       setSelected(newSelecteds);
       return;
     }
@@ -144,7 +134,7 @@ export default function DashboardUser({ responseData }) {
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
           <Scrollbar>
-            <TableContainer sx={{ minWidth: 800, color: '#000080'}}>
+            <TableContainer sx={{ minWidth: 800, color: '#000080' }}>
               <Table>
                 <UserListHead
                   order={order}
@@ -164,6 +154,7 @@ export default function DashboardUser({ responseData }) {
                       <TableRow
                         hover
                         key={_id}
+                        
                         tabIndex={-1}
                         role="checkbox"
                         selected={selectedUser}
@@ -230,7 +221,7 @@ export default function DashboardUser({ responseData }) {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={response.length}
+            count={responseData.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

@@ -11,9 +11,9 @@ import ErrorModal from '../UIElement/Modal/ErrorModal';
 const StyledDiv = styled('div')(({ theme }) => ({
   margin: '0',
   border: '10px',
-  width: '95%',
+  width: '100%',
   padding: '1rem',
-  backgroundColor: '#14162F',
+  backgroundColor: '#2065D1',
 color: 'white',
   borderRadius: '5px',
 }));
@@ -96,7 +96,10 @@ const UserssPage = () => {
                   Courses : {val.courses.toString().split(',').join(', ')}
                 </Typography>
                 <Typography variant="h6" gutterBottom my={2}>
-                  Attendance : {val.atClass}
+                  Email : {val.email}
+                </Typography>
+                <Typography variant="h6" gutterBottom my={2}>
+                  Contact No : {val.contact}
                 </Typography>
                 <Typography variant="h6" gutterBottom my={2}>
                   Gender : {val.gender}

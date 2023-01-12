@@ -1,8 +1,8 @@
-import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
-import { sentenceCase } from 'change-case';
+
 import { useState } from 'react';
-import axios from 'axios';
+import PropTypes from 'prop-types';
+
 import { useNavigate } from 'react-router-dom';
 // @mui
 import {
@@ -10,8 +10,7 @@ import {
   Table,
   Stack,
   Paper,
-  Avatar,
-  Button,
+  IconButton,
   Popover,
   Checkbox,
   TableRow,
@@ -20,12 +19,11 @@ import {
   TableCell,
   Container,
   Typography,
-  IconButton,
   TableContainer,
   TablePagination,
 } from '@mui/material';
 // components
-import Label from '../label';
+
 import Iconify from '../iconify';
 import Scrollbar from '../scrollbar';
 // sections
@@ -40,23 +38,9 @@ const TABLE_HEAD = [
   { id: 'department', label: 'Department', alignItems: true },
   { id: 'gender', label: 'Gender', alignItems: true },
   { id: 'level', label: 'Level', alignItems: true },
+  {id: ''}
 ];
 
-const response = [
-  {
-    _id: '0d5bd8967f299bd54f5c4d39',
-    firstName: 'Danladii',
-    lastName: 'Mustafar',
-    email: 'egerald344@gmail.com',
-    gender: 'Male',
-    studentId: 43900,
-    origin: 'Abuja',
-    department: 'Physic',
-    courses: ['PHY101', 'PHY103', 'PHY105', 'PHY107', 'GST100'],
-    address: 'Kubwa',
-    atClass: 0,
-  },
-];
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
@@ -76,6 +60,7 @@ function getComparator(order, orderBy) {
 }
 
 function applySortFilter(array, comparator, query) {
+  
   const stabilizedThis = array?.map((el, index) => [el, index]);
   stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -83,14 +68,18 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) => _user.firstName.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis?.map((el) => el[0]);
 }
 
-export default function AdminIndex({ responseData }) {
-  const navigate = useNavigate();
+AdminIndex.propTypes = {
+  responseData: PropTypes.array,
+};
 
+
+export default function AdminIndex({ responseData, deleteUser }) {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -105,10 +94,11 @@ export default function AdminIndex({ responseData }) {
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const handleOpenMenu = (event) => {
-    setOpen(event.currentTarget);
+  const [ userInfo, setUserInfo ] = useState(null);
 
-    console.log(event);
+  const handleOpenMenu = (event, id) => {
+    setUserInfo(id);
+    setOpen(event.currentTarget);
   };
 
   const handleCloseMenu = () => {
@@ -155,16 +145,26 @@ export default function AdminIndex({ responseData }) {
   };
 
   const handleFilterByName = (event) => {
+    console.log(event)
     setPage(0);
     setFilterName(event.target.value);
   };
+
+  const handleEditHandler = () => {
+    navigate(`/dashboard/student/${userInfo}`, { replace: true });
+  }
+
+  const handleDeleteHandler = async () => {
+    deleteUser(userInfo)
+    setOpen(null);
+  }
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - responseData.length) : 0;
 
   const filteredUsers = applySortFilter(responseData, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers?.length && !!filterName;
-  console.log(responseData);
+  
   return (
     <>
       <Container>
@@ -211,7 +211,11 @@ export default function AdminIndex({ responseData }) {
 
                         <TableCell align="center">100</TableCell>
 
-                        
+                        <TableCell align="right">
+                          <IconButton size="large" color="inherit" onClick={(e) => handleOpenMenu(e, _id)}>
+                            <Iconify icon={'eva:more-vertical-fill'} /> 
+                          </IconButton>
+                        </TableCell>
                       </TableRow>
                     );
                   })}
@@ -252,7 +256,7 @@ export default function AdminIndex({ responseData }) {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={response.length}
+            count={responseData.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -278,12 +282,12 @@ export default function AdminIndex({ responseData }) {
           },
         }}
       >
-        <MenuItem>
+        <MenuItem onClick={ handleEditHandler}>
           <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
           Edit
         </MenuItem>
 
-        <MenuItem sx={{ color: 'error.main' }}>
+        <MenuItem onClick={ handleDeleteHandler } sx={{ color: 'error.main' }}>
           <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
           Delete
         </MenuItem>

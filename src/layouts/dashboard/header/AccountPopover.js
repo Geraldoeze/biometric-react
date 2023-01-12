@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 // @mui
 import { alpha } from '@mui/material/styles';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
+import { Box, Divider, Typography, Stack, MenuItem, IconButton, Popover } from '@mui/material';
 // mocks_
 
 // context
@@ -18,15 +18,12 @@ const MENU_OPTIONS = [
   },
 ];
 
-const photoURL = '/assets/icons/user_121715.svg'
 // ----------------------------------------------------------------------
 
-export default function AccountPopover(props) {
- 
+export default function AccountPopover() {
   const navigate = useNavigate();
   const auth = useContext(AuthContext);
   const [open, setOpen] = useState(null);
-  
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -39,25 +36,24 @@ export default function AccountPopover(props) {
   const handleHome = () => {
     setOpen(null);
     navigate('/dashboard', { replace: true });
-  }
+  };
 
   const handleLogout = () => {
-    setOpen(null)
+    setOpen(null);
     auth.logout(null);
     navigate('/auth', { replace: true });
-  }
+  };
 
   const handleLogin = () => {
     setOpen(null);
     navigate('/auth', { replace: true });
-  }
+  };
 
   const account = {
     displayName: auth.userDetails?.name,
     email: auth.userDetails?.email,
-    emailVeri: auth.userDetails?.emailVerified
+    emailVeri: auth.userDetails?.emailVerified,
   };
-
 
   return (
     <>
@@ -78,7 +74,7 @@ export default function AccountPopover(props) {
           }),
         }}
       >
-        <AccountCircleIcon fontSize='large'/>
+        <AccountCircleIcon fontSize="large" />
       </IconButton>
 
       <Popover
@@ -100,39 +96,41 @@ export default function AccountPopover(props) {
           },
         }}
       >
-        {auth.isLoggedIn && <Box sx={{ my: 1.5, px: 2.5 }}>
-          <Typography variant="subtitle2" noWrap>
-            {account.displayName}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            Verified : {account.emailVeri.toString()}
-          </Typography>
-        </Box>
-        }
+        {auth.isLoggedIn && (
+          <Box sx={{ my: 1.5, px: 2.5 }}>
+            <Typography variant="subtitle2" noWrap>
+              {account.displayName}
+            </Typography>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+              {account.email}
+            </Typography>
+            <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+              Verified : {account.emailVeri.toString()}
+            </Typography>
+          </Box>
+        )}
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-      { auth.isLoggedIn && (
-        <Stack sx={{ p: 1 }}>
-          {MENU_OPTIONS.map((option) => (
-            <MenuItem key={option.label} onClick={handleHome}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </Stack>
-      )}
+        {auth.isLoggedIn && (
+          <Stack sx={{ p: 1 }}>
+            {MENU_OPTIONS.map((option) => (
+              <MenuItem key={option.label} onClick={handleHome}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Stack>
+        )}
         <Divider sx={{ borderStyle: 'dashed' }} />
-            {auth.isLoggedIn ? 
-            <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
-          Logout
-        </MenuItem>
-          : <MenuItem onClick={handleLogin} sx={{ m: 1 }}>
-          Login
-        </MenuItem>}
-        
+        {auth.isLoggedIn ? (
+          <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
+            Logout
+          </MenuItem>
+        ) : (
+          <MenuItem onClick={handleLogin} sx={{ m: 1 }}>
+            Login
+          </MenuItem>
+        )}
       </Popover>
     </>
   );

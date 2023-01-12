@@ -22,10 +22,10 @@ export default function App() {
       userDetails,
       login,
       logout}}>  
-    {/* <ThemeProvider> */}
+    <ThemeProvider>
       <ScrollToTop />
       <Router />
-    {/* </ThemeProvider> */}
+    </ThemeProvider>
     </AuthContext.Provider>
   );
 }

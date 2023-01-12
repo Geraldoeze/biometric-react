@@ -35,9 +35,11 @@ const TABLE_HEAD = [
    { id: 'department', label: 'Department', alignItems: true },
     {id: 'course', label: 'Course', alignItems: true},
     {id: 'lecturer', label: 'Lecturer', alignItems: true},
-  { id: 'level', label: 'Level', alignItems: true },
+  
   {id: 'location', label: 'Location', alignitems: true},
-  {id: 'date', label: 'Date/Time', alignItems: true}
+  {id: 'date', label: 'Date/Time', alignItems: true},
+  {id: 'current', label: 'Current', alignItems: true},
+  {id: 'addStudent', label: 'Student', alignItems: true}
 ];
 
 // ----------------------------------------------------------------------
@@ -71,7 +73,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis?.map((el) => el[0]);
 }
 
-export default function AttenDance({ responseData, closeAtt }) {
+export default function AttenDance({ responseData, closeAtt, showAtt }) {
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(null);
@@ -117,9 +119,16 @@ export default function AttenDance({ responseData, closeAtt }) {
     setFilterName(event.target.value);
   };
 
-  const userHandler = (e, val) => {
-    closeAtt(e, val);
+  const userHandler = (e, val) => {    
+    if (val.attValue === 'open') {
+      closeAtt(e, val);
+    }
   };
+
+  const showAttHandler = (e, val) => {
+    showAtt(val);
+  };
+  
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - responseData.length) : 0;
 
@@ -146,7 +155,7 @@ export default function AttenDance({ responseData, closeAtt }) {
                 />
                 <TableBody>
                   {filteredUsers?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { _id, department, course, lecturer, location, refinedDate, attValue } = row;
+                    const { _id, department, course, lecturer, location, refinedDate, attValue, attendance } = row;
                     const selectedUser = selected.indexOf(department) !== -1;
                     const dept = department.toUpperCase();
                     return (
@@ -156,7 +165,7 @@ export default function AttenDance({ responseData, closeAtt }) {
                         tabIndex={-1}
                         role="checkbox"
                         selected={selectedUser}
-                        onClick={(e) => userHandler(e, row)}
+                       
                       >
                         <TableCell padding="checkbox">
                           {/* <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, firstName)} /> */}
@@ -164,23 +173,24 @@ export default function AttenDance({ responseData, closeAtt }) {
 
                         <TableCell component="th" alignitems="center" scope="row" padding="normal">
                           <Stack direction="row" alignItems="center" spacing={1}>
-                            <Typography variant="subtitle2" noWrap>
+                            <Typography sx={{cursor: 'pointer'}} variant="subtitle2" noWrap onClick={(e) => showAttHandler(e, row)}>
                               {dept}
                             </Typography>
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="center">{course}</TableCell>
+                        <TableCell sx={{cursor: 'pointer'}} align="center" onClick={(e) => showAttHandler(e, row)} >{course}</TableCell>
 
-                        <TableCell align="center">{lecturer}</TableCell>
+                        <TableCell sx={{cursor: 'pointer'}} align="center" onClick={(e) => showAttHandler(e, row)}>{lecturer}</TableCell>
 
                         <TableCell align="center">{location}</TableCell>
 
-                        <TableCell align="center">100</TableCell>
 
-                        <TableCell align="center">{refinedDate}</TableCell>
+                        <TableCell align="center" >{refinedDate}</TableCell>
 
-                        <TableCell align="right">{attValue}</TableCell>
+                        <TableCell sx={{cursor: 'pointer'}} align="right"  onClick={(e) => userHandler(e, row)}>{attValue}</TableCell>
+
+                        <TableCell sx={{cursor: 'pointer'}} align="center"  >{attendance?.length}</TableCell>
 
                       </TableRow>
                     );
