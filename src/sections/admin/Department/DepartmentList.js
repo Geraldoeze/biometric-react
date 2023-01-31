@@ -43,7 +43,7 @@ const DepartmentList = () => {
       try {
         const send = await sendRequest(`http://localhost:7000/admin/getDept`);
         setResponse(send.response);
-        console.log(send);
+        
       } catch (err) {
         console.log(err);
       }

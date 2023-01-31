@@ -22,7 +22,7 @@ const ErrorModal = ({ open, onClose, error, response }) => {
     <Typography variant="h5">Something went wrong try again.!!</Typography>
   );
 
-  console.log(error, response)
+  
 
   const err = error ? (
     <Container>

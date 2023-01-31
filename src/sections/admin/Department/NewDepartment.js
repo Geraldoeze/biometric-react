@@ -35,21 +35,22 @@ const NewDepartment = ({ open, onClose, updateContent }) => {
   }, []);
   const onSubmitHandler = async (e) => {
     const arrCourse = course.split(',')
-    const arrC = arrCourse.map((val) => val.trim())
-
-  console.log(arrC)
-    // const newDepartmentData = { ...inputState, courses: arrC };
-    // if (newDepartmentData?.courses?.length >= 1) {
-    //   const newCourse = {...newDepartmentData, _id: RandomId.toString() }
-    //   updateContent(newCourse);
-    // }
-    // try {
-    //   const send = await sendRequest(`http://localhost:7000/admin/createData`, 'POST', newDepartmentData);
-    //   console.log(send);
-    // } catch (err) {
-    //   console.log(err);
-    // }
-    // onClose();
+    const arrC = arrCourse.map((val) => {
+      const newVal = val.trim()
+      return newVal
+    })
+    const newDepartmentData = { ...inputState, courses: arrC };
+    if (newDepartmentData?.courses?.length >= 1) {
+      const newCourse = {...newDepartmentData, _id: RandomId.toString() }
+      updateContent(newCourse);
+    }
+    try {
+      const send = await sendRequest(`http://localhost:7000/admin/createData`, 'POST', newDepartmentData);
+      console.log(send);
+    } catch (err) {
+      console.log(err);
+    }
+    onClose();
   };
 
   const changeHandler = (e) => {

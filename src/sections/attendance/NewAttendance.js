@@ -96,6 +96,19 @@ const NewAttendance = ({ open, onClose, updateContent }) => {
   const handleChangeCourse = (event) => {
     setCourse([event.target.value]);
   };
+
+  function getCor() {
+    const devo = dept?.map((val) => val.courses);
+    let allCourses = [];
+    for (const i in devo) {
+      for (const j in devo[i]) {
+        allCourses.push( `${devo[i][j]},`);
+      }
+    }
+    return allCourses;
+  }
+
+  const allCourse = getCor();
   return (
     <div>
       {isLoading && <LoadingSpinner asOverlay />}
@@ -113,29 +126,11 @@ const NewAttendance = ({ open, onClose, updateContent }) => {
                 renderInput={(params) => <TextField {...params} />}
               />
             </LocalizationProvider>
-            <FormControl sx={{ m: 1, minWidth: 250 }}>
-              <InputLabel id="demo-simple-select-helper-label" name="department">
-                Department
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-helper-label"
-                id="department"
-                
-                value={depart}
-                label="Department"
-                onChange={handleChangeDept}
-              >
-                {dept?.map((val, ) => <MenuItem value={val.department} key={val._id}>
-                      {val.department}
-                    </MenuItem>
-                  
-                )}
-              </Select>
-            </FormControl>
-            {depart && (
-              <FormControl sx={{ m: 1, width: 200 }}>
+           
+            
+              <FormControl sx={{ m: 1, width: 250 }}>
                 <InputLabel id="demo-simple-select-helper-label" name="course">
-                  Courses
+                  Select Course
                 </InputLabel>
                 <Select
                   labelId="demo-simple-select-helper-label"
@@ -146,26 +141,15 @@ const NewAttendance = ({ open, onClose, updateContent }) => {
                   onChange={handleChangeCourse}
                   input={<OutlinedInput label="Courses" />}
                 >
-                  {dept
-                    ?.find((val) => val.department === depart)
-                    ?.courses.map((cors, idx) => <MenuItem value={cors} key={idx}>{cors}</MenuItem>
-                    )}
+                 {allCourse.map((val, idx) => (
+                      <MenuItem value={val} key={idx}>
+                      <Checkbox checked={course.indexOf(val) > -1} />
+                      <ListItemText primary={val} />
+                    </MenuItem>
+                    ) )}
                 </Select>
               </FormControl>
-            )}
-           
-            <TextField
-              autoFocus
-              sx={{ m: 1, width: 150 }}
-              name="lecturer"
-              id="lecturer"
-              label="Lecturer"
-              type="text"
-              value={inputState.lecturer}
-              onChange={(e) => changeHandler(e)}
-              size="small"
-              variant="outlined"
-            />
+            
             <TextField
               autoFocus
               sx={{ m: 1, width: 150 }}

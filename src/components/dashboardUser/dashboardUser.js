@@ -30,7 +30,7 @@ import { UserListHead, UserListToolbar } from '../../sections/dashboard/user';
 const TABLE_HEAD = [
   { id: 'firstname', label: 'First Name', alignItems: true },
   { id: 'lastname', label: 'Last Name', alignItems: true },
-  { id: 'studentId', label: 'Student ID', alignItems: true },
+  { id: 'matric', label: 'Matric', alignItems: true },
   { id: 'department', label: 'Department', alignItems: true },
   { id: 'gender', label: 'Gender', alignItems: true },
   { id: 'level', label: 'Level', alignItems: true },
@@ -147,7 +147,7 @@ export default function DashboardUser({ responseData }) {
                 />
                 <TableBody>
                   {filteredUsers?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { _id, firstName, lastName, studentId, department, gender } = row;
+                    const { _id, firstName, lastName, matric, department, gender, levelId } = row;
                     const selectedUser = selected.indexOf(firstName) !== -1;
                     const dept = department.toUpperCase();
                     return (
@@ -174,13 +174,13 @@ export default function DashboardUser({ responseData }) {
 
                         <TableCell align="center">{lastName}</TableCell>
 
-                        <TableCell align="center">{studentId}</TableCell>
+                        <TableCell align="center">{matric}</TableCell>
 
                         <TableCell align="center">{dept}</TableCell>
 
                         <TableCell align="center">{gender}</TableCell>
 
-                        <TableCell align="center">100</TableCell>
+                        <TableCell align="center">{levelId}</TableCell>
                       </TableRow>
                     );
                   })}

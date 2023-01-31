@@ -66,7 +66,8 @@ const EditUser = ({ user, dept }) => {
     origin: user?.origin,
     gender: user?.gender,
     department: user?.department,
-    contact: user?.contact
+    contact: user?.contact,
+    country: user?.country
   });
   console.log(user);
 
@@ -110,6 +111,18 @@ const EditUser = ({ user, dept }) => {
     });
   };
 
+  function getCor() {
+    const devo = dept?.map((val) => val.courses);
+    let allCourses = [];
+    for (const i in devo) {
+      for (const j in devo[i]) {
+        allCourses.push( `${devo[i][j]},`);
+      }
+    }
+    return allCourses;
+  }
+
+  const allCourse = getCor();
   return (
     <>
       {isLoading && <LoadingSpinner />}
@@ -191,7 +204,7 @@ const EditUser = ({ user, dept }) => {
                     })}
                   </Select>
                 </FormControl>
-                {/* { && ( */}
+                
                 <FormControl sx={{ my: 2, width: 300 }}>
                   <InputLabel id="demo-simple-select-helper-label" name="course">
                     Courses
@@ -206,17 +219,15 @@ const EditUser = ({ user, dept }) => {
                     renderValue={(selected) => selected.join(', ')}
                     MenuProps={MenuProps}
                   >
-                    {dept
-                      ?.find((val) => val.department === inputState?.department)
-                      ?.courses.map((cors, idx) => (
-                        <MenuItem value={cors} key={idx}>
-                          <Checkbox checked={course.indexOf(cors) > -1} />
-                          <ListItemText primary={cors} />
-                        </MenuItem>
-                      ))}
+                   {allCourse.map((val, idx) => (
+                      <MenuItem value={val} key={idx}>
+                      <Checkbox checked={course.indexOf(val) > -1} />
+                      <ListItemText primary={val} />
+                    </MenuItem>
+                    ) )}
                   </Select>
                 </FormControl>
-                {/* )} */}
+                
               </Stack>
 
               <TextField
@@ -240,6 +251,7 @@ const EditUser = ({ user, dept }) => {
                 value={inputState.origin}
               />
               <TextField sx={{ mb: 2 }} id="contact" name="contact" label="Phone No" fullWidth variant="outlined" onChange={(e) => changeHandler(e)} value={inputState.contact}/>
+              <TextField sx={{ mb: 2 }} id="country" name="country" label="Country" fullWidth variant="outlined" onChange={(e) => changeHandler(e)} value={inputState.country}/>
 
               <LoadingButton variant="contained" fullWidth type="submit" sx={{ py: '0.8rem', mt: '1rem' }}>
                 Submit

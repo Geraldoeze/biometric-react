@@ -1,6 +1,7 @@
 import { filter } from 'lodash';
 
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { AuthContext } from '../../context/auth-context';
 
 import { useNavigate } from 'react-router-dom';
 // @mui
@@ -32,7 +33,7 @@ import { UserListHead, UserListToolbar } from '../dashboard/user';
 
 const TABLE_HEAD = [
     
-   { id: 'department', label: 'Department', alignItems: true },
+   
     {id: 'course', label: 'Course', alignItems: true},
     {id: 'lecturer', label: 'Lecturer', alignItems: true},
   
@@ -89,6 +90,7 @@ export default function AttenDance({ responseData, closeAtt, showAtt }) {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const auth = useContext(AuthContext);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -129,6 +131,7 @@ export default function AttenDance({ responseData, closeAtt, showAtt }) {
     showAtt(val);
   };
   
+  
 
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - responseData.length) : 0;
 
@@ -155,9 +158,9 @@ export default function AttenDance({ responseData, closeAtt, showAtt }) {
                 />
                 <TableBody>
                   {filteredUsers?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { _id, department, course, lecturer, location, refinedDate, attValue, attendance } = row;
-                    const selectedUser = selected.indexOf(department) !== -1;
-                    const dept = department.toUpperCase();
+                    const { _id, course, location, refinedDate, attValue, attendance } = row;
+                    const selectedUser = selected.indexOf(course) !== -1;
+                    
                     return (
                       <TableRow
                         hover
@@ -174,14 +177,12 @@ export default function AttenDance({ responseData, closeAtt, showAtt }) {
                         <TableCell component="th" alignitems="center" scope="row" padding="normal">
                           <Stack direction="row" alignItems="center" spacing={1}>
                             <Typography sx={{cursor: 'pointer'}} variant="subtitle2" noWrap onClick={(e) => showAttHandler(e, row)}>
-                              {dept}
+                              {course}
                             </Typography>
                           </Stack>
                         </TableCell>
 
-                        <TableCell sx={{cursor: 'pointer'}} align="center" onClick={(e) => showAttHandler(e, row)} >{course}</TableCell>
-
-                        <TableCell sx={{cursor: 'pointer'}} align="center" onClick={(e) => showAttHandler(e, row)}>{lecturer}</TableCell>
+                        <TableCell sx={{cursor: 'pointer'}} align="center" onClick={(e) => showAttHandler(e, row)}>{auth?.userDetails?.name}</TableCell>
 
                         <TableCell align="center">{location}</TableCell>
 

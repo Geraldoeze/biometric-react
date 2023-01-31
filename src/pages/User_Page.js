@@ -13,7 +13,7 @@ const StyledDiv = styled('div')(({ theme }) => ({
   border: '10px',
   width: '100%',
   padding: '1rem',
-  backgroundColor: '#2065D1',
+  backgroundColor: '#14162F',
 color: 'white',
   borderRadius: '5px',
 }));
@@ -36,7 +36,7 @@ const UserssPage = () => {
     };
     studentData();
   }, []);
-
+console.log(data)
   const deleteUserHandler = async () => {
     try {
       const deleteUser = await sendRequest(`http://localhost:7000/admin/delete/${userId}`, 'DELETE');
@@ -87,13 +87,16 @@ const UserssPage = () => {
                   </Typography>
                 </Stack>
                 <Typography variant="h6" gutterBottom my={2}>
-                  Student ID : {val.studentId}
+                  Matric No : {val.matric}
                 </Typography>
                 <Typography variant="h6" gutterBottom my={2}>
                   Department : {val.department.toUpperCase()}
                 </Typography>
                 <Typography variant="h6" gutterBottom my={2}>
                   Courses : {val.courses.toString().split(',').join(', ')}
+                </Typography>
+                <Typography variant="h6" gutterBottom my={2}>
+                  Level : {val.levelId}
                 </Typography>
                 <Typography variant="h6" gutterBottom my={2}>
                   Email : {val.email}
@@ -109,6 +112,9 @@ const UserssPage = () => {
                 </Typography>
                 <Typography variant="h6" gutterBottom my={2}>
                   Address : {val.address}
+                </Typography>
+                <Typography variant="h6" gutterBottom my={2}>
+                  Country : {val.country}
                 </Typography>
               </StyledDiv>
             );
