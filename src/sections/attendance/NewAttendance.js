@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useEffect } from 'react';
+import React, { useState, useReducer, useEffect, useContext } from 'react';
 import {
   Button,
   OutlinedInput,
@@ -20,6 +20,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
+import { AuthContext } from '../../context/auth-context';
 import { useHttpClient } from '../../hooks/http-hook';
 import LoadingSpinner from '../../UIElement/LoadingSpinner';
 
@@ -44,8 +45,9 @@ const NewAttendance = ({ open, onClose, updateContent }) => {
   const [depart, setDepart] = useState('');
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
+  const auth = useContext(AuthContext);
   const [inputState, dispatch] = useReducer(inputReducer, {
-    lecturer: '',
+    lecturer: auth?.userDetails.name,
     location: '',
     attValue: 'open',
     attendance: []
@@ -67,14 +69,15 @@ const NewAttendance = ({ open, onClose, updateContent }) => {
 
   const onSubmitHandler = async () => {
     const refinedDate = date.toDate().toString().slice(0, 25);
-    const newDepartmentData = { ...inputState, course, department: depart, refinedDate };
+    const newDepartmentData = { ...inputState, course, refinedDate };
     
-    if (newDepartmentData?.course?.length >= 1) {
-      updateContent(newDepartmentData);
-    }
+   
     try {
       const send = await sendRequest(`https://biometric-node.vercel.app/users/attendance`, 'POST', newDepartmentData);
       console.log(send);
+      if (newDepartmentData?.course?.length >= 1) {
+        updateContent(newDepartmentData);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -89,9 +92,9 @@ const NewAttendance = ({ open, onClose, updateContent }) => {
     });
   };
 
-  const handleChangeDept = (event) => {
-    setDepart(event.target.value);
-  };
+  // const handleChangeDept = (event) => {
+  //   setDepart(event.target.value);
+  // };
 
   const handleChangeCourse = (event) => {
     setCourse([event.target.value]);
@@ -102,7 +105,7 @@ const NewAttendance = ({ open, onClose, updateContent }) => {
     let allCourses = [];
     for (const i in devo) {
       for (const j in devo[i]) {
-        allCourses.push( `${devo[i][j]},`);
+        allCourses.push( `${devo[i][j]}`);
       }
     }
     return allCourses;
@@ -128,7 +131,7 @@ const NewAttendance = ({ open, onClose, updateContent }) => {
             </LocalizationProvider>
            
             
-              <FormControl sx={{ m: 1, width: 250 }}>
+              <FormControl sx={{ m: 1, width: 200 }}>
                 <InputLabel id="demo-simple-select-helper-label" name="course">
                   Select Course
                 </InputLabel>

@@ -144,11 +144,12 @@ const NewUserForm = ({ dept }) => {
     let allCourses = [];
     for (const i in devo) {
       for (const j in devo[i]) {
-        allCourses.push( `${devo[i][j]},`);
+        allCourses.push( `${devo[i][j]}`);
       }
     }
     return allCourses;
   }
+  console.log(getCor())
 
   const allCourse = getCor();
 

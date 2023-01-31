@@ -63,12 +63,13 @@ const AttendanceList = () => {
 
   // get new contents created
   const getNewState = (value) => {
-    console.log(value)
+    
     const newValue = { ...value, _id: RandomId.toString() };
+    console.log(newValue)
     setRefresh(newValue);
     setResponse([...response, newValue]);
   };
-
+  console.log(response)
   // get contents edited
   const getEditContent = (value) => {
     setResponse((response) => {
