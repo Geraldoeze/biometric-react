@@ -23,7 +23,7 @@ const AddUserAtt = ({ value, open, onClose, updateContent }) => {
   // find the user
   try {
     if (token) {
-      const send = await sendRequest(`http://localhost:7000/users/getUser/${token}`);
+      const send = await sendRequest(`https://biometric-node.vercel.app/users/getUser/${token}`);
     setData(send.response[0]);
     }
     
@@ -46,7 +46,7 @@ console.log(data)
     
     if (token) {
        try {
-        const sendToken = await sendRequest(`http://localhost:7000/admin/getuserId/${token}`, 'POST', userAtt);
+        const sendToken = await sendRequest(`https://biometric-node.vercel.app/admin/getuserId/${token}`, 'POST', userAtt);
         console.log(sendToken);
         updateContent(sendToken.response)
         

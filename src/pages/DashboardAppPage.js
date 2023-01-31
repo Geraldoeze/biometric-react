@@ -22,7 +22,7 @@ export default function DashboardAppPage() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const send = await sendRequest(`http://localhost:7000/users`);
+        const send = await sendRequest(`https://biometric-node.vercel.app/users`);
         setResponse(send.response);
       } catch (err) {
         console.log(err);

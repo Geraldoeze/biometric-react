@@ -28,7 +28,7 @@ const UserssPage = () => {
   useEffect(() => {
     const studentData = async () => {
       try {
-        const send = await sendRequest(`http://localhost:7000/users/getUser/${userId}`);
+        const send = await sendRequest(`https://biometric-node.vercel.app/users/getUser/${userId}`);
         setData(send.response);
       } catch (err) {
         console.log(err);
@@ -39,7 +39,7 @@ const UserssPage = () => {
 console.log(data)
   const deleteUserHandler = async () => {
     try {
-      const deleteUser = await sendRequest(`http://localhost:7000/admin/delete/${userId}`, 'DELETE');
+      const deleteUser = await sendRequest(`https://biometric-node.vercel.app/admin/delete/${userId}`, 'DELETE');
       console.log(deleteUser)
       navigate('/dashboard', {replace: true});
     } catch(err) {

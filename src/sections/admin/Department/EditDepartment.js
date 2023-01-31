@@ -70,7 +70,7 @@ export default function EditDepartment({ values, open, onClose, updateContent, d
     }
 
     try {
-      const send = await sendRequest(`http://localhost:7000/admin/editDept/${inputState._id}`, 'PUT', newDepartmentData);
+      const send = await sendRequest(`https://biometric-node.vercel.app/admin/editDept/${inputState._id}`, 'PUT', newDepartmentData);
       console.log(send);
     } catch (err) {
       console.log(err);
@@ -81,7 +81,7 @@ export default function EditDepartment({ values, open, onClose, updateContent, d
   const deleteHandler = async () => {
     deleteCon(values._id);
 
-    const deleteDept = await sendRequest(`http://localhost:7000/admin/deleteDept/${values._id}`, 'DELETE');
+    const deleteDept = await sendRequest(`https://biometric-node.vercel.app/admin/deleteDept/${values._id}`, 'DELETE');
     console.log(deleteDept);
     onClose();
   };

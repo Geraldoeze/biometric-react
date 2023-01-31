@@ -85,7 +85,7 @@ const EditUser = ({ user, dept }) => {
     };
     console.log(newUserData);
     try {
-      const sendEdit = await sendRequest(`http://localhost:7000/admin/update/${user._id}`, 'PUT', newUserData);
+      const sendEdit = await sendRequest(`https://biometric-node.vercel.app/admin/update/${user._id}`, 'PUT', newUserData);
       console.log(sendEdit);
       navigate('/dashboard', { replace: true });
     } catch (err) {

@@ -36,7 +36,7 @@ const AttendanceList = () => {
   useEffect(() => {
     const getAttendance = async () => {
       try {
-        const send = await sendRequest(`http://localhost:7000/users/attendanceList`);
+        const send = await sendRequest(`https://biometric-node.vercel.app/users/attendanceList`);
         setResponse(send.response);
         console.log(send);
       } catch (err) {

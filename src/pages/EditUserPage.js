@@ -17,14 +17,14 @@ const EditUserPage = () => {
   useEffect(() => {
     const getData = async () => {
     try {
-     const send = await sendRequest(`http://localhost:7000/users/getUser/${userId}`)
+     const send = await sendRequest(`https://biometric-node.vercel.app/users/getUser/${userId}`)
      setResponse(send.response[0])
      console.log(send.response);
     } catch (err) {
       console.log(err)
     }
     try {
-        const sendReq = await sendRequest(`http://localhost:7000/admin/getDept`)
+        const sendReq = await sendRequest(`https://biometric-node.vercel.app/admin/getDept`)
      setResponseData(sendReq.response)
      console.log(sendReq.response);
     } catch (err) {
