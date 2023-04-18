@@ -1,4 +1,5 @@
-import { useEffect, useState, useContext, useReducer } from 'react';
+import React from 'react';
+import {  useState, useContext, useReducer } from 'react';
 
 import {
   Box,
@@ -103,16 +104,16 @@ const NewUserForm = ({ dept }) => {
       console.log(err);
     }
   };
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleChange = (event) => {
     setSex(event.target.value);
   };
-  const handleChangeDept = (event: SelectChangeEvent) => {
+  const handleChangeDept = (event) => {
     setDepart(event.target.value);
   };
   const selectLevel = (e) => {
     setLevel(e.target.value);
   };
-  const handleChangeCourse = (event: SelectChangeEvent<typeof course>) => {
+  const handleChangeCourse = (event) => {
     const {
       target: { value },
     } = event;
