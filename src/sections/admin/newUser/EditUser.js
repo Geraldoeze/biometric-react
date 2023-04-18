@@ -93,7 +93,7 @@ const EditUser = ({ user, dept }) => {
     }
   };
 
-  const handleChangeCourse = (event: SelectChangeEvent<typeof course>) => {
+  const handleChangeCourse = (event) => {
     const {
       target: { value },
     } = event;
@@ -114,6 +114,7 @@ const EditUser = ({ user, dept }) => {
   function getCor() {
     const devo = dept?.map((val) => val.courses);
     let allCourses = [];
+    
     for (const i in devo) {
       for (const j in devo[i]) {
         allCourses.push( `${devo[i][j]}`);
@@ -123,6 +124,8 @@ const EditUser = ({ user, dept }) => {
   }
 
   const allCourse = getCor();
+  
+  
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}

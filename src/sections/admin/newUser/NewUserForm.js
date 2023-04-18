@@ -1,4 +1,4 @@
-import React from 'react';
+
 import {  useState, useContext, useReducer } from 'react';
 
 import {
@@ -147,7 +147,8 @@ const NewUserForm = ({ dept }) => {
 
   function getCor() {
     const devo = dept?.map((val) => val.courses);
-    let allCourses = [];
+
+    const allCourses = [];
     for (const i in devo) {
       for (const j in devo[i]) {
         allCourses.push( `${devo[i][j]}`);
@@ -159,6 +160,8 @@ const NewUserForm = ({ dept }) => {
 
   const allCourse = getCor();
 
+
+  
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
