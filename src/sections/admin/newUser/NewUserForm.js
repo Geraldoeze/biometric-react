@@ -18,6 +18,7 @@ import {
 
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useNavigate, useLocation } from 'react-router-dom';
+import {v4} from 'uuid';
 
 import { AuthContext } from '../../../context/auth-context';
 import { useHttpClient } from '../../../hooks/http-hook';
@@ -30,6 +31,7 @@ import ErrorModal from '../../../UIElement/Modal/ErrorModal';
 
 // create matric number
 const RandomId = 100000 + Math.floor(Math.random() * 900000);
+
 const matricYear = new Date().getFullYear();
 
 const ITEM_HEIGHT = 48;
@@ -65,7 +67,7 @@ const NewUserForm = ({ dept }) => {
   const [level, setLevel] = useState('');
   const [sex, setSex] = useState('');
   const [depart, setDepart] = useState('');
-  const [fingerPrint, setFingerPrint] = useState("");
+  
   // const [disable, setDisable] = useState(true);
   const [disable, setDisable] = useState(false);
   const [course, setCourse] = useState([]);
@@ -93,7 +95,7 @@ const NewUserForm = ({ dept }) => {
       levelId: level,
       matric,
       ninNumber,
-      fingerPrint
+      fingerPrint: v4(),
     };
     try {
       const send = await sendRequest(`https://biometric-node.vercel.app/users/create`, 'POST', newUserData);
@@ -145,6 +147,7 @@ const NewUserForm = ({ dept }) => {
     return `${matricYear}/0/${RandomId}`;
   };
 
+  
   function getCor() {
     const devo = dept?.map((val) => val.courses);
 

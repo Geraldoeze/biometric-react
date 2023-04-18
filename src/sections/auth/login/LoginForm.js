@@ -47,6 +47,7 @@ import LoadingSpinner from '../../../UIElement/LoadingSpinner';
       try {
         
         const send = await sendRequest(`https://biometric-node.vercel.app/auth/login`, 'POST', values);
+        
         console.log(send);
         auth.login(send.userDetails._id, send.token, send.userDetails)
         navigate('/dashboard', { replace: true });
