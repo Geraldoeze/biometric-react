@@ -125,7 +125,7 @@ const EditUser = ({ user, dept }) => {
   const allCourse = getCor();
   return (
     <>
-      {isLoading && <LoadingSpinner />}
+      {isLoading && <LoadingSpinner asOverlay />}
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between">

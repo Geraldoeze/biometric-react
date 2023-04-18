@@ -25,6 +25,8 @@ import Modal from '../../../UIElement/Modal/Modal';
 import LoadingSpinner from '../../../UIElement/LoadingSpinner';
 import ErrorModal from '../../../UIElement/Modal/ErrorModal';
 
+
+
 // create matric number
 const RandomId = 100000 + Math.floor(Math.random() * 900000);
 const matricYear = new Date().getFullYear();
@@ -62,7 +64,9 @@ const NewUserForm = ({ dept }) => {
   const [level, setLevel] = useState('');
   const [sex, setSex] = useState('');
   const [depart, setDepart] = useState('');
-  const [disable, setDisable] = useState(true);
+  const [fingerPrint, setFingerPrint] = useState("");
+  // const [disable, setDisable] = useState(true);
+  const [disable, setDisable] = useState(false);
   const [course, setCourse] = useState([]);
 
   const [inputState, dispatch] = useReducer(inputReducer, {
@@ -88,6 +92,7 @@ const NewUserForm = ({ dept }) => {
       levelId: level,
       matric,
       ninNumber,
+      fingerPrint
     };
     try {
       const send = await sendRequest(`https://biometric-node.vercel.app/users/create`, 'POST', newUserData);
@@ -332,7 +337,7 @@ const NewUserForm = ({ dept }) => {
                 </Stack>
                 <Typography variant="h6">
                   {/* { nin?.response} */}
-                  response after nin verification failed
+                  {/* response after nin verification failed */}
                 </Typography>
               </Stack>
 
