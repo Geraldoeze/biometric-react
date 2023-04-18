@@ -71,7 +71,7 @@ const EditUser = ({ user, dept }) => {
   });
   console.log(user);
 
-  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const { isLoading,  sendRequest } = useHttpClient();
   console.log(inputState.firstName);
 
   const onSubmitHandler = async (e) => {
