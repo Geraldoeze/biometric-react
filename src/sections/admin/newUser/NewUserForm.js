@@ -327,9 +327,9 @@ const NewUserForm = ({ dept }) => {
                 value={inputState.country}
               />
 
-              <Stack direction="column" width="100%">
-                <Stack direction="row" width="100%" alignItems="center" justifyContent="space-between">
-                  <TextField
+              {/* <Stack direction="column" width="100%">
+                {/* <Stack direction="row" width="100%" alignItems="center" justifyContent="space-between"> */}
+                  {/* <TextField
                     sx={{ mb: 2, width: 300 }}
                     id="ninNumber"
                     name="ninNumber"
@@ -337,16 +337,16 @@ const NewUserForm = ({ dept }) => {
                     fullWidth
                     variant="outlined"
                     value={''}
-                  />
-                  <Button size="small" onClick={verifyNinHandler} variant="contained">
+                  /> */}
+                  {/* <Button size="small" onClick={verifyNinHandler} variant="contained">
                     Verify NIN
-                  </Button>
-                </Stack>
-                <Typography variant="h6">
+                  </Button> */}
+                {/* </Stack> */}
+                {/* <Typography variant="h6">
                   {/* { nin?.response} */}
                   {/* response after nin verification failed */}
-                </Typography>
-              </Stack>
+                {/* </Typography>  */}
+              {/* </Stack>  */}
 
               <Button variant="contained" fullWidth type="submit" disabled={disable} sx={{ py: '0.8rem', mt: '1rem' }}>
                 Submit

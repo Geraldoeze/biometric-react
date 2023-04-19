@@ -11,12 +11,13 @@ import { useHttpClient } from '../../../hooks/http-hook';
 import ErrorModal from '../../../UIElement/Modal/ErrorModal';
 import LoadingSpinner from '../../../UIElement/LoadingSpinner';
 
+// adminNumber: string({ required_error: 'Admin Number is required.' }).min(6, 'Admin Number is 6 digit'),
 const registerSchema = object({
   name: string({ required_error: 'Name is required' })
     .min(4, 'Name must be more than 4 characters')
     .max(32, 'Name must be less than 100 characters'),
   email: string({ required_error: 'Email is required' }).email('Email is invalid'),
-  adminNumber: string({ required_error: 'Admin Number is required.' }).min(6, 'Admin Number is 6 digit'),
+  
   password: string({ required_error: 'Password is required' })
     .min(6, 'Password must be more than 6 characters')
     .max(32, 'Password must be less than 32 characters'),
@@ -85,7 +86,7 @@ const SignUpForm = () => {
             helperText={errors.email ? errors.email.message : ''}
             {...register('email')}
           />
-           <TextField
+           {/* <TextField
             sx={{ mb: 2 }}
             label="Admin Number"
             fullWidth
@@ -94,7 +95,7 @@ const SignUpForm = () => {
             error={!!errors.adminNumber}
             helperText={errors.adminNumber ? errors.adminNumber.message : ''}
             {...register('adminNumber')}
-          />
+          /> */}
           <TextField
             sx={{ mb: 2 }}
             label="Password"
