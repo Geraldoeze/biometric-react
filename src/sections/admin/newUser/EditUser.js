@@ -71,7 +71,7 @@ const EditUser = ({ user, dept }) => {
   });
   console.log(user);
 
-  const { isLoading,  sendRequest } = useHttpClient();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
   console.log(inputState.firstName);
 
   const onSubmitHandler = async (e) => {
@@ -93,7 +93,7 @@ const EditUser = ({ user, dept }) => {
     }
   };
 
-  const handleChangeCourse = (event) => {
+  const handleChangeCourse = (event: SelectChangeEvent<typeof course>) => {
     const {
       target: { value },
     } = event;
@@ -114,7 +114,6 @@ const EditUser = ({ user, dept }) => {
   function getCor() {
     const devo = dept?.map((val) => val.courses);
     let allCourses = [];
-    
     for (const i in devo) {
       for (const j in devo[i]) {
         allCourses.push( `${devo[i][j]}`);
@@ -124,11 +123,9 @@ const EditUser = ({ user, dept }) => {
   }
 
   const allCourse = getCor();
-  
-  
   return (
     <>
-      {isLoading && <LoadingSpinner asOverlay />}
+      {isLoading && <LoadingSpinner />}
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between">

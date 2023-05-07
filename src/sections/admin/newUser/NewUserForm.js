@@ -1,5 +1,4 @@
-
-import {  useState, useContext, useReducer } from 'react';
+import { useEffect, useState, useContext, useReducer } from 'react';
 
 import {
   Box,
@@ -18,7 +17,6 @@ import {
 
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useNavigate, useLocation } from 'react-router-dom';
-import {v4} from 'uuid';
 
 import { AuthContext } from '../../../context/auth-context';
 import { useHttpClient } from '../../../hooks/http-hook';
@@ -27,11 +25,8 @@ import Modal from '../../../UIElement/Modal/Modal';
 import LoadingSpinner from '../../../UIElement/LoadingSpinner';
 import ErrorModal from '../../../UIElement/Modal/ErrorModal';
 
-
-
 // create matric number
 const RandomId = 100000 + Math.floor(Math.random() * 900000);
-
 const matricYear = new Date().getFullYear();
 
 const ITEM_HEIGHT = 48;
@@ -67,9 +62,7 @@ const NewUserForm = ({ dept }) => {
   const [level, setLevel] = useState('');
   const [sex, setSex] = useState('');
   const [depart, setDepart] = useState('');
-  
-  // const [disable, setDisable] = useState(true);
-  const [disable, setDisable] = useState(false);
+  const [disable, setDisable] = useState(true);
   const [course, setCourse] = useState([]);
 
   const [inputState, dispatch] = useReducer(inputReducer, {
@@ -95,7 +88,6 @@ const NewUserForm = ({ dept }) => {
       levelId: level,
       matric,
       ninNumber,
-      fingerPrint: v4(),
     };
     try {
       const send = await sendRequest(`https://biometric-node.vercel.app/users/create`, 'POST', newUserData);
@@ -106,16 +98,16 @@ const NewUserForm = ({ dept }) => {
       console.log(err);
     }
   };
-  const handleChange = (event) => {
+  const handleChange = (event: SelectChangeEvent) => {
     setSex(event.target.value);
   };
-  const handleChangeDept = (event) => {
+  const handleChangeDept = (event: SelectChangeEvent) => {
     setDepart(event.target.value);
   };
   const selectLevel = (e) => {
     setLevel(e.target.value);
   };
-  const handleChangeCourse = (event) => {
+  const handleChangeCourse = (event: SelectChangeEvent<typeof course>) => {
     const {
       target: { value },
     } = event;
@@ -147,11 +139,9 @@ const NewUserForm = ({ dept }) => {
     return `${matricYear}/0/${RandomId}`;
   };
 
-  
   function getCor() {
     const devo = dept?.map((val) => val.courses);
-
-    const allCourses = [];
+    let allCourses = [];
     for (const i in devo) {
       for (const j in devo[i]) {
         allCourses.push( `${devo[i][j]}`);
@@ -163,8 +153,6 @@ const NewUserForm = ({ dept }) => {
 
   const allCourse = getCor();
 
-
-  
   return (
     <>
       {isLoading && <LoadingSpinner asOverlay />}
@@ -327,9 +315,9 @@ const NewUserForm = ({ dept }) => {
                 value={inputState.country}
               />
 
-              {/* <Stack direction="column" width="100%">
-                {/* <Stack direction="row" width="100%" alignItems="center" justifyContent="space-between"> */}
-                  {/* <TextField
+              <Stack direction="column" width="100%">
+                <Stack direction="row" width="100%" alignItems="center" justifyContent="space-between">
+                  <TextField
                     sx={{ mb: 2, width: 300 }}
                     id="ninNumber"
                     name="ninNumber"
@@ -337,16 +325,16 @@ const NewUserForm = ({ dept }) => {
                     fullWidth
                     variant="outlined"
                     value={''}
-                  /> */}
-                  {/* <Button size="small" onClick={verifyNinHandler} variant="contained">
+                  />
+                  <Button size="small" onClick={verifyNinHandler} variant="contained">
                     Verify NIN
-                  </Button> */}
-                {/* </Stack> */}
-                {/* <Typography variant="h6">
+                  </Button>
+                </Stack>
+                <Typography variant="h6">
                   {/* { nin?.response} */}
-                  {/* response after nin verification failed */}
-                {/* </Typography>  */}
-              {/* </Stack>  */}
+                  response after nin verification failed
+                </Typography>
+              </Stack>
 
               <Button variant="contained" fullWidth type="submit" disabled={disable} sx={{ py: '0.8rem', mt: '1rem' }}>
                 Submit

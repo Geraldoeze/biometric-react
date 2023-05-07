@@ -78,7 +78,7 @@ const AdminPage = () => {
           </Button>
         </Stack>
         <Stack direction="column" alignItems="center" justifyContent="space-between" mb={5}>
-          {isLoading && <LoadingSpinner asOverlay />}
+          {isLoading && <LoadingSpinner />}
           <ErrorModal error={error} onClose={clearError} open={error} response={null} />
           {response && <AdminIndex responseData={response} deleteUser={deleteUserInfo} />}
         </Stack>

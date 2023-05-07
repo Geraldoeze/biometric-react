@@ -22,7 +22,6 @@ export default function GlobalStyles() {
           padding: 0,
           width: '100%',
           height: '100%',
-          backgroundColor: 'white'
         },
         '#root': {
           width: '100%',
