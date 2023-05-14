@@ -62,7 +62,7 @@ const NewUserForm = ({ dept }) => {
   const [level, setLevel] = useState('');
   const [sex, setSex] = useState('');
   const [depart, setDepart] = useState('');
-  const [disable, setDisable] = useState(true);
+  const [disable, setDisable] = useState(false);
   const [course, setCourse] = useState([]);
 
   const [inputState, dispatch] = useReducer(inputReducer, {
@@ -315,7 +315,7 @@ const NewUserForm = ({ dept }) => {
                 value={inputState.country}
               />
 
-              <Stack direction="column" width="100%">
+              {/* <Stack direction="column" width="100%">
                 <Stack direction="row" width="100%" alignItems="center" justifyContent="space-between">
                   <TextField
                     sx={{ mb: 2, width: 300 }}
@@ -331,10 +331,10 @@ const NewUserForm = ({ dept }) => {
                   </Button>
                 </Stack>
                 <Typography variant="h6">
-                  {/* { nin?.response} */}
+                  {/* { nin?.response}
                   response after nin verification failed
-                </Typography>
-              </Stack>
+                </Typography> 
+              </Stack> */}
 
               <Button variant="contained" fullWidth type="submit" disabled={disable} sx={{ py: '0.8rem', mt: '1rem' }}>
                 Submit
