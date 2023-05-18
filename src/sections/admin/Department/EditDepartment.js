@@ -70,7 +70,7 @@ export default function EditDepartment({ values, open, onClose, updateContent, d
     }
 
     try {
-      const send = await sendRequest(`https://biometric-node.vercel.app/admin/editDept/${inputState._id}`, 'PUT', newDepartmentData);
+      const send = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/admin/editDept/${inputState._id}`, 'PUT', newDepartmentData);
       console.log(send);
     } catch (err) {
       console.log(err);

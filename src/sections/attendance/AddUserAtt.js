@@ -1,81 +1,67 @@
-import { useState, useEffect } from 'react';
-import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { useState } from 'react';
+import { Button, Stack, Dialog, DialogActions, DialogContent, DialogTitle, Typography, TextField } from '@mui/material';
 
 import { useHttpClient } from '../../hooks/http-hook';
 import LoadingSpinner from '../../UIElement/LoadingSpinner';
 import ErrorModal from '../../UIElement/Modal/ErrorModal';
-
-
 
 // const userIds = ['63bd99f0043aea136a38e415', '63b94fe7d3d94aa8f1dd3cde', '63bd99f0043aea136a38e415']
 
 // const rand = userIds[Math.floor(Math.random() * userIds.length)]
 
 const AddUserAtt = ({ value, open, onClose, updateContent }) => {
-  console.log(value);
-  
   const { isLoading, error, sendRequest, clearError, resMessage } = useHttpClient();
-  const [token, setToken ] = useState();
-  const [data, setData] = useState();
+  const [matric, setMatric] = useState('');
+  const [failed, setFailed] = useState(false);
 
- const getTokenHandler = async () => {
-  setToken("63bfb92918b006cec536f282")
-  // find the user
-  try {
-    if (token) {
-      const send = await sendRequest(`https://biometric-node.vercel.app/users/getUser/${token}`);
-    setData(send.response[0]);
-    }
-    
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-console.log(data)
-
-  const onSubmitHandler = async (e) => {
-    const userAtt = { 
+  const onSubmitHandler = async () => {
+    const userAtt = {
       attId: value?._id,
-      department: value?.department,
-      course: value?.course
-    }
+      course: value?.course,
+      matricId: matric
+    };
     
-    console.log(userAtt)
     // token should be sent with the request or it could be added to the POST body
-    
-    if (token) {
-       try {
-        const sendToken = await sendRequest(`https://biometric-node.vercel.app/admin/getuserId/${token}`, 'POST', userAtt);
-        console.log(sendToken);
-        updateContent(sendToken.response)
+
+    if (matric?.length >= 5) {
+      try {
+        const sendMatric = await sendRequest(
+          `${process.env.REACT_APP_BACKEND_URL}/admin/getuserId/${userAtt?.attId}`,
+          'POST',
+          userAtt
+        );
         
+        updateContent(sendMatric.response);
       } catch (err) {
         console.log(err);
       }
     }
-      onClose()
+    onClose();
   };
-
 
   return (
     <div>
       {isLoading && <LoadingSpinner asOverlay />}
-      <ErrorModal error={error} open={error} onClose={clearError} response={resMessage}  /> 
+      <ErrorModal error={error} open={error} onClose={clearError} response={resMessage} />
       <Dialog open={open} onClose={onClose}>
         <DialogTitle>Add Student Attendance</DialogTitle>
         <DialogContent>
-          <Stack direction="row" alignItems="center" justifyContent="space-between" m={5}>
-           { data ? <div>
-             <h2>Student Id :{data?.studentId}</h2>
-             <p>First Name : {data?.firstName}</p>
-             <p>Last Name : {data?.lastName}</p>
-           </div> : <h3>verify fingerprint</h3> }
+          <Stack direction="column" alignItems="center" justifyContent="space-between" m={5}>
+            <Typography variant="h5" mb={3}> Input Matric Number Below </Typography>
+
+            <TextField
+              sx={{ mb: 2 }}
+              label="Matric"
+              fullWidth
+              required
+              type="text"
+              value={matric}
+              onChange={(e) => setMatric(e.target.value)}
+            />
           </Stack>
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}>CANCEL</Button>
-          <Button onClick={getTokenHandler}>GENERATE</Button>
           <Button type="submit" onClick={onSubmitHandler}>
             CONFIRM
           </Button>

@@ -50,7 +50,7 @@ const SignUpForm = () => {
   const onSubmitHandler = async (values) => {
     console.log(values)
     try {
-      await sendRequest(`https://biometric-node.vercel.app/auth/register`, 'POST', values);
+      await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/auth/register`, 'POST', values);
 
       navigate('/auth/login', { replace: true });
     } catch (err) {

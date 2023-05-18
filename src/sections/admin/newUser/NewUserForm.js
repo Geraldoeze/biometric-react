@@ -90,7 +90,7 @@ const NewUserForm = ({ dept }) => {
       ninNumber,
     };
     try {
-      const send = await sendRequest(`https://biometric-node.vercel.app/users/create`, 'POST', newUserData);
+      const send = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/users/create`, 'POST', newUserData);
       console.log(send);
 
       navigate('/dashboard', { replace: true });

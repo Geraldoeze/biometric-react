@@ -138,7 +138,9 @@ export default function AttenDance({ responseData, closeAtt, showAtt }) {
   const filteredUsers = applySortFilter(responseData, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers?.length && !!filterName;
-
+  // const attendLength = (val) =>  {
+  //   console.log(val)
+  // }
   return (
     <>
       <Container>

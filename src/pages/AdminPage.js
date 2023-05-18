@@ -23,7 +23,7 @@ const AdminPage = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const send = await sendRequest(`https://biometric-node.vercel.app/users`);
+        const send = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/users`);
         setResponse(send.response);
         console.log(send);
       } catch (err) {
@@ -43,7 +43,7 @@ const AdminPage = () => {
 
   const deleteUserInfo = async (userId) => {
     setResponse((response) => response?.filter((del) => del._id !== userId));
-    const send =await sendRequest(`https://biometric-node.vercel.app/admin/delete/${userId}`, "DELETE")
+    const send =await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/admin/delete/${userId}`, "DELETE")
     console.log(send)
   }
 

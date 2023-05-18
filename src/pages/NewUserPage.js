@@ -16,7 +16,7 @@ const NewUserPage = () => {
   useEffect(() => {
     const getData = async () => {
     try {
-     const send = await sendRequest(`https://biometric-node.vercel.app/admin/getDept`)
+     const send = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/admin/getDept`)
      setResponse(send.response)
      console.log(send);
     } catch (err) {
@@ -41,7 +41,6 @@ const NewUserPage = () => {
         < ErrorModal open={error} error={error} onClose={clearError} response={null}/>
         <NewUserForm dept={response} />
       </Container>
-        
         </>
 
      );

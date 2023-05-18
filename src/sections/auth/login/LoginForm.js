@@ -44,9 +44,10 @@ import LoadingSpinner from '../../../UIElement/LoadingSpinner';
     }, [isSubmitSuccessful]);
   
     const onSubmitHandler = async (values) => {
+      console.log(process.env.REACT_APP_BACKEND_URL)
       try {
         
-        const send = await sendRequest(`https://biometric-node.vercel.app/auth/login`, 'POST', values);
+        const send = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/auth/login`, 'POST', values);
         console.log(send);
         auth.login(send.userDetails._id, send.token, send.userDetails)
         navigate('/dashboard', { replace: true });

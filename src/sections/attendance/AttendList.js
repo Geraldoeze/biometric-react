@@ -32,8 +32,8 @@ const inputReducer = (state, action) => {
   };
 
 
-const AttendList = ({ value, openList, closeList, addNewUser }) => {
-  console.log(value)
+const AttendList = ({ value, openList, closeList }) => {
+  
     const [ openAdd, setOpenAdd ] = useState(false);
 
     const [inputState, dispatch] = useReducer(inputReducer, {
@@ -50,7 +50,7 @@ const AttendList = ({ value, openList, closeList, addNewUser }) => {
     }
 
     const changeAttHandler = (user) => {
-      console.log(user)
+      
         dispatch({
           type: 'HANDLE_INPUT',
           field: 'attendance',
@@ -81,7 +81,7 @@ const AttendList = ({ value, openList, closeList, addNewUser }) => {
                     <tbody>
                     {inputState?.attendance?.map(emp => (
                             <tr key={emp._id}>
-                                <td>{emp.studentId}</td>
+                                <td>{emp.matric}</td>
                                 <td>{emp.firstName}</td>
                                 <td>{emp.lastName}</td>
                              

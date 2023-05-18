@@ -36,9 +36,9 @@ const AttendanceList = () => {
   useEffect(() => {
     const getAttendance = async () => {
       try {
-        const send = await sendRequest(`https://biometric-node.vercel.app/users/attendanceList`);
+        const send = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/users/attendanceList`);
         setResponse(send.response);
-        console.log(send);
+        
       } catch (err) {
         console.log(err);
       }
@@ -56,33 +56,37 @@ const AttendanceList = () => {
     setEdit(false);
   };
   const onClickHandler = (e, val) => {
-    console.log(val);
+    
     setEditValue(val);
     setEdit(true);
   };
 
   // get new contents created
   const getNewState = (value) => {
-    
     const newValue = { ...value, _id: RandomId.toString() };
     console.log(newValue)
     setRefresh(newValue);
     setResponse([...response, newValue]);
   };
-  console.log(response)
+
+
+  
+
   // get contents edited
   const getEditContent = (value) => {
     setResponse((response) => {
       const filtered = response?.filter((del) => del._id !== value._id);
       return [...filtered, value];
     });
+    
   };
 
   // getDeletedContents
   const deleteContents = (id) => {
     setResponse((response) => response?.filter((del) => del._id !== id));
-    console.log(response);
+    
   };
+  
 
   // show attendance list
   const showAttendace = (val) => {
@@ -119,11 +123,11 @@ const AttendanceList = () => {
         {isLoading && <LoadingSpinner asOverlay />}
 
 
-        {open && <AttendList value={value} openList={open} closeList={closeShowAttendace} />}
+        {open && <AttendList value={value} openList={open} closeList={closeShowAttendace}  />}
 
 
         {response?.length > 0 ? (
-          <AttenDance responseData={response} closeAtt={onClickHandler} showAtt={showAttendace} />
+          <AttenDance responseData={response} closeAtt={onClickHandler} showAtt={showAttendace}  />
         ) : (
           <Stack direction="column" alignItems="center" justifyContent="space-between" sx={{ my: 5, p: 4 }}>
             <Typography textAlign="center" variant="h6">

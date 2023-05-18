@@ -29,9 +29,9 @@ export default function DashboardAppPage() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const send = await sendRequest(`https://biometric-node.vercel.app/users`);
-        const getAttendance = await sendRequest(`https://biometric-node.vercel.app/users/attendanceList`);
-        const getCourses = await sendRequest(`https://biometric-node.vercel.app/admin/getDept`);
+        const send = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/users`);
+        const getAttendance = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/users/attendanceList`);
+        const getCourses = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/admin/getDept`);
         setDepart(getCourses.response);
         setAttendance(getAttendance.response);
         setResponse(send.response);

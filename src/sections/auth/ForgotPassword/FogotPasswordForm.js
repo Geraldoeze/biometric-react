@@ -41,7 +41,7 @@ import LoadingSpinner from '../../../UIElement/LoadingSpinner';
     const onSubmitHandler = async (values) => {
       const data = {...values, redirectUrl: `${window.location.origin}/auth/resetPassword`}
       try {
-        await sendRequest(`https://biometric-node.vercel.app/auth/passwordReset`, 'POST', data);
+        await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/auth/passwordReset`, 'POST', data);
           
         } catch (err) {
           console.log(err.message, err.response)

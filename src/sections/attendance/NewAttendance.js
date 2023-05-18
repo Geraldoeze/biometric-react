@@ -57,9 +57,9 @@ const NewAttendance = ({ open, onClose, updateContent }) => {
   useEffect(() => {
     const getData = async () => {
       try {
-        const send = await sendRequest(`https://biometric-node.vercel.app/admin/getDept`);
+        const send = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/admin/getDept`);
         setDept(send.response);
-        console.log(send);
+        
       } catch (err) {
         console.log(err);
       }
@@ -73,8 +73,8 @@ const NewAttendance = ({ open, onClose, updateContent }) => {
     
    
     try {
-      const send = await sendRequest(`https://biometric-node.vercel.app/users/attendance`, 'POST', newDepartmentData);
-      console.log(send);
+      const send = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/users/attendance`, 'POST', newDepartmentData);
+      
       if (newDepartmentData?.course?.length >= 1) {
         updateContent(newDepartmentData);
       }
